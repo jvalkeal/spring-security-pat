@@ -1,0 +1,48 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "ApiServerApplication",
+            "request": "launch",
+            "mainClass": "com.github.jvalkeal.secpat.apiserver.ApiServerApplication",
+            "projectName": "apiserver",
+            "args": "--spring.profiles.active=patsfromyml"
+        },
+        {
+            "type": "java",
+            "name": "ApiServerApplicationWithAuthServer",
+            "request": "launch",
+            "mainClass": "com.github.jvalkeal.secpat.apiserver.ApiServerApplication",
+            "projectName": "apiserver",
+            "args": "--spring.profiles.active=authserver"
+        },
+        {
+            "type": "java",
+            "name": "IdServerApplication",
+            "request": "launch",
+            "mainClass": "com.github.jvalkeal.secpat.idserver.IdServerApplication",
+            "projectName": "idserver",
+            "args": "--spring.profiles.active=patsfromyml"
+        },
+    ],
+    "compounds": [
+        {
+            "name": "WithAuthServer",
+            "configurations": [
+                "IdServerApplication",
+                "ApiServerApplicationWithAuthServer",
+            ]
+        },
+        {
+            "name": "WithoutAuthServer",
+            "configurations": [
+                "IdServerApplication",
+                "ApiServerApplication",
+            ]
+        }
+    ]
+}
