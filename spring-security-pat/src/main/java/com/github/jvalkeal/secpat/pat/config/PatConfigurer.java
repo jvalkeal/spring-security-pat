@@ -68,7 +68,7 @@ public class PatConfigurer extends AbstractHttpConfigurer<PatConfigurer, HttpSec
 		return this;
 	}
 
-	@SuppressWarnings({ "unused", "unchecked" })
+	@SuppressWarnings({ "unchecked" })
 	private <T> T getConfigurer(Class<T> type) {
 		return (T) this.configurers.get(type);
 	}
