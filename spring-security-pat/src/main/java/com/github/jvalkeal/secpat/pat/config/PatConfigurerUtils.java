@@ -26,7 +26,6 @@ import org.springframework.util.StringUtils;
 
 import com.github.jvalkeal.secpat.pat.authorization.InMemoryPatAuthorizationService;
 import com.github.jvalkeal.secpat.pat.authorization.PatAuthorizationService;
-import com.github.jvalkeal.secpat.pat.introspect.PatIntrospector;
 
 final class PatConfigurerUtils {
 

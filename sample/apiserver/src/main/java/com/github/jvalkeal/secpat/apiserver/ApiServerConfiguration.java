@@ -1,19 +1,17 @@
 package com.github.jvalkeal.secpat.apiserver;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.github.jvalkeal.secpat.common.CommonPatConfiguration;
 import com.github.jvalkeal.secpat.pat.config.PatConfigurer;
 import com.github.jvalkeal.secpat.pat.introspect.SpringAuthServerPatIntrospector;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)

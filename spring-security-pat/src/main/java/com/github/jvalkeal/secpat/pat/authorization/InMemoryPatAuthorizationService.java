@@ -19,8 +19,6 @@ package com.github.jvalkeal.secpat.pat.authorization;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.github.jvalkeal.secpat.pat.keygen.PatGenerationService;
-
 /**
  * In-Memory implementation of a {@link PatAuthorizationService}.
  *
@@ -32,15 +30,6 @@ import com.github.jvalkeal.secpat.pat.keygen.PatGenerationService;
 public class InMemoryPatAuthorizationService implements PatAuthorizationService {
 
 	private Map<String, PatAuthorization> authorizations = new ConcurrentHashMap<>();
-
-	// private PatGenerationService patGenerationService;
-
-	// public InMemoryPatAuthorizationService() {
-	// }
-
-	// public InMemoryPatAuthorizationService(PatGenerationService patGenerationService) {
-	// 	this.patGenerationService = patGenerationService;
-	// }
 
 	@Override
 	public void save(PatAuthorization authorization) {
@@ -54,12 +43,6 @@ public class InMemoryPatAuthorizationService implements PatAuthorizationService 
 
 	@Override
 	public PatAuthorization find(String token) {
-		// if (patGenerationService != null) {
-		// 	boolean validated = patGenerationService.validate(token);
-		// 	if (!validated) {
-		// 		return null;
-		// 	}
-		// }
 		return authorizations.get(token);
 	}
 
