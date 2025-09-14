@@ -15,7 +15,6 @@ import com.github.jvalkeal.secpat.pat.authorization.InMemoryPatAuthorizationServ
 import com.github.jvalkeal.secpat.pat.authorization.PatAuthorization;
 import com.github.jvalkeal.secpat.pat.authorization.PatAuthorizationService;
 import com.github.jvalkeal.secpat.pat.keygen.OrgTypeChecksumBase62PatGenerationService;
-import com.github.jvalkeal.secpat.pat.keygen.PatGenerationService;
 import com.github.jvalkeal.secpat.pat.keygen.PatGenerator;
 import com.github.jvalkeal.secpat.pat.keygen.PatMatcher;
 import com.github.jvalkeal.secpat.pat.keygen.PatService;
@@ -34,18 +33,12 @@ public class CommonPatConfiguration {
 		PatService checksumPatService = new OrgTypeChecksumBase62PatGenerationService("myorg", "pat", 51);
 		PatGenerator generator = fakeUserPatService.generator();
 		InMemoryPatAuthorizationService service = new InMemoryPatAuthorizationService();
-		// InMemoryPatAuthorizationService service = new InMemoryPatAuthorizationService(patGenerationService);
 		Instant now = Instant.now();
 		Instant month = now.plus(30, ChronoUnit.DAYS);
 		Instant sec = now.plus(1, ChronoUnit.SECONDS);
 		Instant monthMinusDay = month.minus(1, ChronoUnit.DAYS);
 		Instant nowMinus1Day = now.minus(1, ChronoUnit.DAYS);
 		Instant nowMinus2Days = now.minus(1, ChronoUnit.DAYS);
-		// service.save(new PatAuthorization("user1", new HashSet<>(Arrays.asList("read")), patGenerationService.generate("user1"), now, month, now));
-		// service.save(new PatAuthorization("user2", new HashSet<>(Arrays.asList("write")), patGenerationService.generate("user2"), now, month, now));
-		// service.save(new PatAuthorization("user3", new HashSet<>(Arrays.asList("write")), patGenerationService.generate("user3"), now, sec, now));
-		// service.save(new PatAuthorization("user4", new HashSet<>(Arrays.asList("write")), patGenerationService.generate("user4"), now, month, monthMinusDay));
-		// service.save(new PatAuthorization("user5", new HashSet<>(Arrays.asList("read")), patGenerationService.generate("user5"), nowMinus2Days, nowMinus1Day, nowMinus2Days));
 		service.save(new PatAuthorization("user1", new HashSet<>(Arrays.asList("read")), generator.apply("user1"), now, month, now));
 		service.save(new PatAuthorization("user2", new HashSet<>(Arrays.asList("write")), generator.apply("user2"), now, month, now));
 		service.save(new PatAuthorization("user3", new HashSet<>(Arrays.asList("write")), generator.apply("user3"), now, sec, now));
@@ -55,8 +48,8 @@ public class CommonPatConfiguration {
 		service.save(new PatAuthorization("user6", new HashSet<>(Arrays.asList("read")), token6, now, month, now));
 		String token7 = checksumPatService.generator().apply(null);
 		service.save(new PatAuthorization("user7", new HashSet<>(Arrays.asList("read")), token7, now, month, now));
-		log.info("XXX token {} {}", "user6", token6);
-		log.info("XXX token {} {}", "user7", token7);
+		log.info("Generated token {} {}", "user6", token6);
+		log.info("Generated token {} {}", "user7", token7);
 		return service;
 	}
 
@@ -91,29 +84,6 @@ public class CommonPatConfiguration {
 				return token != null && token.startsWith("pat");
 			};
 		}
-
-		// @Override
-		// public String generate(Object source) {
-		// 	if (source instanceof String user) {
-		// 		String token = switch (user) {
-		// 			case "user1" -> "pat1111";
-		// 			case "user2" -> "pat2222";
-		// 			case "user3" -> "pat3333";
-		// 			case "user4" -> "pat4444";
-		// 			case "user5" -> "pat5555";
-		// 			default -> null;
-		// 		};
-		// 		if (token != null) {
-		// 			return token;
-		// 		}
-		// 	}
-		// 	throw new IllegalArgumentException("Unsupported source");
-		// }
-
-		// @Override
-		// public boolean validate(String pat) {
-		// 	return pat != null && pat.startsWith("pat");
-		// }
 
 	}
 
