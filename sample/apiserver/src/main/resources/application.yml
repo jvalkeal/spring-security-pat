@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: apiserver
+  security:
+    oauth2:
+      client:
+        registration:
+          oidc-client:
+            provider: oidc-provider
+            client-id: oidc-client
+            client-secret: secret
+            authorization-grant-type: authorization_code
+            # redirect-uri: http://apiserver:8080/login/oauth2/code/oidc-client
+            scope: openid,profile
+        provider:
+          oidc-provider:
+            issuer-uri: http://idserver:9000
+      resourceserver:
+        jwt:
+          issuer-uri: http://idserver:9000
+          jwk-set-uri: http://idserver:9000/oauth2/jwks
+logging:
+  level:
+    org.springframework.security: trace
+    com.github.jvalkeal.secpat: trace
+

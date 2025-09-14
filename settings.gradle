@@ -1,0 +1,7 @@
+rootProject.name = 'secpat'
+include 'spring-security-pat'
+include 'spring-security-pat-authorization-server'
+include 'spring-security-pat-autoconfigure'
+include 'sample:common'
+include 'sample:apiserver'
+include 'sample:idserver'

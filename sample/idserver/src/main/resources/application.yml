@@ -1,0 +1,42 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: idserver
+  security:
+    oauth2:
+      authorizationserver:
+        issuer: http://idserver:9000
+        client:
+          oidc-client:
+            registration:
+              client-id: "oidc-client"
+              client-secret: "{noop}secret"
+              client-authentication-methods:
+                - "client_secret_basic"
+              authorization-grant-types:
+                - "authorization_code"
+                - "refresh_token"
+                - "client_credentials"
+              redirect-uris:
+                - "http://apiserver:8080/login/oauth2/code/oidc-client"
+              post-logout-redirect-uris:
+                - "http://apiserver:8080"
+              scopes:
+                - "openid"
+                - "profile"
+            require-authorization-consent: false
+          cc-client:
+            registration:
+              client-id: "cc-client"
+              client-secret: "{noop}secret2"
+              client-authentication-methods:
+                - "client_secret_post"
+              authorization-grant-types:
+                - "client_credentials"
+
+logging:
+  level:
+    org.springframework.security: trace
+    com.github.jvalkeal.secpat: trace

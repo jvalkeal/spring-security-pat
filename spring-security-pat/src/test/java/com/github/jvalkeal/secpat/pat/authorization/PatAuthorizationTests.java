@@ -1,0 +1,72 @@
+/*
+ * Copyright 2025-present the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.github.jvalkeal.secpat.pat.authorization;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.time.Instant;
+import java.util.Collections;
+import java.util.Set;
+
+import org.junit.jupiter.api.Test;
+
+public class PatAuthorizationTests {
+
+	@Test
+	void allArgumentsMustBeSet() {
+		String principalName = "fake";
+		Set<String> authorizedScopes = Collections.emptySet();
+		String token = "fake";
+		Instant now = Instant.now();
+
+		assertThatThrownBy(() -> {
+			new PatAuthorization(null, authorizedScopes, token, now, now, now);
+		}).isInstanceOf(IllegalArgumentException.class);
+		assertThatThrownBy(() -> {
+			new PatAuthorization(principalName, null, token, now, now, now);
+		}).isInstanceOf(IllegalArgumentException.class);
+		assertThatThrownBy(() -> {
+			new PatAuthorization(principalName, authorizedScopes, null, now, now, now);
+		}).isInstanceOf(IllegalArgumentException.class);
+		assertThatThrownBy(() -> {
+			new PatAuthorization(principalName, authorizedScopes, token, null, now, now);
+		}).isInstanceOf(IllegalArgumentException.class);
+		assertThatThrownBy(() -> {
+			new PatAuthorization(principalName, authorizedScopes, token, now, null, now);
+		}).isInstanceOf(IllegalArgumentException.class);
+		assertThatThrownBy(() -> {
+			new PatAuthorization(principalName, authorizedScopes, token, now, now, null);
+		}).isInstanceOf(IllegalArgumentException.class);
+	}
+
+	@Test
+	void wrongTimesThrows() {
+		String principalName = "fake";
+		Set<String> authorizedScopes = Collections.emptySet();
+		String token = "fake";
+		Instant before = Instant.now();
+		Instant after = before.plusSeconds(1);
+
+		assertThatThrownBy(() -> {
+			new PatAuthorization(principalName, authorizedScopes, token, after, before, before);
+		}).isInstanceOf(IllegalArgumentException.class);
+
+		assertThatThrownBy(() -> {
+			new PatAuthorization(principalName, authorizedScopes, token, before, before, after);
+		}).isInstanceOf(IllegalArgumentException.class);
+	}
+}

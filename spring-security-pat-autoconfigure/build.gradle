@@ -1,0 +1,47 @@
+plugins {
+	id 'java-library'
+	id 'org.springframework.boot' version '3.5.5' apply false
+	id 'io.spring.dependency-management' version '1.1.7'
+	id 'eclipse'
+}
+
+group = 'com.github.jvalkeal'
+version = '0.0.1-SNAPSHOT'
+description = 'Secpat Security Pat AutoConfiguration'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+eclipse {
+	classpath {
+		configurations.compileOnly.setCanBeResolved(true)
+		plusConfigurations.add( configurations.compileOnly )
+	}
+}
+
+dependencyManagement {
+	imports {
+		mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+	}
+}
+
+dependencies {
+	compileOnly project(':spring-security-pat')
+	compileOnly project(':spring-security-pat-authorization-server')
+	testImplementation project(':spring-security-pat')
+	testImplementation project(':spring-security-pat-authorization-server')
+	implementation 'org.springframework.boot:spring-boot-autoconfigure'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
