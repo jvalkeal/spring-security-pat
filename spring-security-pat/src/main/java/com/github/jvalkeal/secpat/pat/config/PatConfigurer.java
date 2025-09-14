@@ -42,6 +42,9 @@ public class PatConfigurer extends AbstractHttpConfigurer<PatConfigurer, HttpSec
 
 	@Override
 	public void init(HttpSecurity builder) throws Exception {
+		this.configurers.values().forEach((configurer) -> {
+			configurer.init(builder);
+		});
 		super.init(builder);
 	}
 
@@ -78,6 +81,15 @@ public class PatConfigurer extends AbstractHttpConfigurer<PatConfigurer, HttpSec
 	}
 
 	PatIntrospector getIntrospector(HttpSecurity http) {
+		if (this.patIntrospector != null) {
+			return this.patIntrospector;
+		}
+
+		PatIntrospectionEndpointConfigurer patIntrospectionEndpointConfigurer = getConfigurer(
+				PatIntrospectionEndpointConfigurer.class);
+		if (patIntrospectionEndpointConfigurer != null) {
+			this.patIntrospector = patIntrospectionEndpointConfigurer.getPatIntrospector();
+		}
 		if (this.patIntrospector != null) {
 			return this.patIntrospector;
 		}
@@ -120,6 +132,8 @@ public class PatConfigurer extends AbstractHttpConfigurer<PatConfigurer, HttpSec
 		PatTokenAuthenticationFilter filter = new PatTokenAuthenticationFilter(authenticationManager);
 		http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 
+		this.configurers.values().forEach((configurer) -> configurer.configure(http));
+
 		AuthenticationProvider authenticationProvider = getAuthenticationProvider(http);
 		http.authenticationProvider(authenticationProvider);
 		// http.authenticationProvider(new PatAuthenticationProvider());
@@ -132,6 +146,15 @@ public class PatConfigurer extends AbstractHttpConfigurer<PatConfigurer, HttpSec
 		// }
 
 
+		// this.configurers.values().forEach((configurer) -> configurer.configure(http));
+
+		// PatIntrospectionEndpointConfigurer patIntrospectionEndpointConfigurer = getConfigurer(
+		// 		PatIntrospectionEndpointConfigurer.class);
+		// if (patIntrospectionEndpointConfigurer != null) {
+		// 	PatIntrospector xxx = patIntrospectionEndpointConfigurer.getPatIntrospector();
+		// }
+
+		super.configure(http);
 	}
 
 

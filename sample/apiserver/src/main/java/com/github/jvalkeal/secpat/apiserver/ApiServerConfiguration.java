@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.github.jvalkeal.secpat.pat.config.PatConfigurer;
-import com.github.jvalkeal.secpat.pat.introspect.SpringAuthServerPatIntrospector;
 
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
@@ -28,13 +27,11 @@ public class ApiServerConfiguration {
 				.requestMatchers("/api/**").authenticated();
 			});
 			http.with(PatConfigurer.dsl(), pat -> {
-				// pat.endpointIntrospection(withDefaults());
-				SpringAuthServerPatIntrospector patIntrospector = SpringAuthServerPatIntrospector.builder()
-					.introspectionUri("http://idserver:9000/pat/introspect")
-					.clientId("oidc-client")
-					.clientSecret("secret")
-					.build();
-				pat.introspector(patIntrospector);
+				pat.endpointIntrospection(endpoint -> {
+					endpoint.introspectionUri("http://idserver:9000/pat/introspect");
+					endpoint.clientId("oidc-client");
+					endpoint.clientSecret("secret");
+				});
 			});
 			http.oauth2Login(withDefaults());
 			http.oauth2Client(withDefaults());

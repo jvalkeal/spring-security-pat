@@ -4,29 +4,59 @@ import org.springframework.security.config.ObjectPostProcessor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
+import com.github.jvalkeal.secpat.pat.introspect.PatIntrospector;
+import com.github.jvalkeal.secpat.pat.introspect.SpringAuthServerPatIntrospector;
+
 public class PatIntrospectionEndpointConfigurer extends AbstractPatConfigurer {
+
+	private String introspectionUri;
+
+	private String clientId;
+
+	private String clientSecret;
+
+	private PatIntrospector patIntrospector;
+
+	PatIntrospector getPatIntrospector() {
+		return patIntrospector;
+	}
 
 	protected PatIntrospectionEndpointConfigurer(ObjectPostProcessor<Object> objectPostProcessor) {
 		super(objectPostProcessor);
-		//TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void init(HttpSecurity httpSecurity) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'init'");
 	}
 
 	@Override
 	public void configure(HttpSecurity httpSecurity) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'configure'");
+		SpringAuthServerPatIntrospector springAuthServerPatIntrospector = SpringAuthServerPatIntrospector.builder()
+			.introspectionUri(introspectionUri)
+			.clientId(clientId)
+			.clientSecret(clientSecret)
+			.build();
+		this.patIntrospector = springAuthServerPatIntrospector;
 	}
 
 	@Override
 	public RequestMatcher getRequestMatcher() {
-		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'getRequestMatcher'");
+	}
+
+	public PatIntrospectionEndpointConfigurer introspectionUri(String introspectionUri) {
+		this.introspectionUri = introspectionUri;
+		return this;
+	}
+
+	public PatIntrospectionEndpointConfigurer clientId(String clientId) {
+		this.clientId = clientId;
+		return this;
+	}
+
+	public PatIntrospectionEndpointConfigurer clientSecret(String clientSecret) {
+		this.clientSecret = clientSecret;
+		return this;
 	}
 
 }
