@@ -431,6 +431,8 @@ java -jar \
 
 Go to http://apiserver:8080/user/pats, login and create your Personal Access Tokens. These screenshots show the process:
 
+![login](images/login.png)
+
 Generate a new token:
 
 ![pat1](images/pat1.png)
