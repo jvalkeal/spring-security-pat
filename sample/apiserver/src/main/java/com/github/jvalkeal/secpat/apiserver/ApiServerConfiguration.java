@@ -4,17 +4,20 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.github.jvalkeal.secpat.common.CommonJdbcConfiguration;
 import com.github.jvalkeal.secpat.pat.config.PatConfigurer;
 
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
 @Configuration(proxyBeanMethods = false)
+@Import({ CommonJdbcConfiguration.class })
 public class ApiServerConfiguration {
 
 	@Profile("authserver")
@@ -24,7 +27,7 @@ public class ApiServerConfiguration {
 		@Bean
 		public SecurityFilterChain secFilterChain(HttpSecurity http) throws Exception {
 			http.authorizeHttpRequests(authorize -> { authorize
-				.requestMatchers("/api/**").authenticated();
+				.requestMatchers("/api/**", "/user/**").authenticated();
 			});
 			http.with(PatConfigurer.dsl(), pat -> {
 				pat.endpointIntrospection(endpoint -> {

@@ -60,7 +60,8 @@ public final class PatPatsPropertiesMapper {
 		if (!StringUtils.hasText(principalName)) {
 			throw new IllegalStateException("Principal must be specified for pat");
 		}
-		return new PatAuthorization(principalName, scopes, token, issuedAt, expiresAt, notBefore);
+		return PatAuthorization.builder().principal(principalName).scopes(scopes).token(token).issuedAt(issuedAt)
+				.expiresAt(expiresAt).notBefore(notBefore).build();
 	}
 
 }

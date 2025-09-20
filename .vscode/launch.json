@@ -22,11 +22,27 @@
         },
         {
             "type": "java",
+            "name": "ApiServerApplicationWithAuthServerAndPostgres",
+            "request": "launch",
+            "mainClass": "com.github.jvalkeal.secpat.apiserver.ApiServerApplication",
+            "projectName": "apiserver",
+            "args": "--spring.profiles.active=authserver,postgres"
+        },
+        {
+            "type": "java",
             "name": "IdServerApplication",
             "request": "launch",
             "mainClass": "com.github.jvalkeal.secpat.idserver.IdServerApplication",
             "projectName": "idserver",
             "args": "--spring.profiles.active=patsfromyml"
+        },
+        {
+            "type": "java",
+            "name": "IdServerApplicationWithPostgres",
+            "request": "launch",
+            "mainClass": "com.github.jvalkeal.secpat.idserver.IdServerApplication",
+            "projectName": "idserver",
+            "args": "--spring.profiles.active=postgres"
         },
     ],
     "compounds": [
@@ -43,6 +59,13 @@
                 "IdServerApplication",
                 "ApiServerApplication",
             ]
-        }
+        },
+        {
+            "name": "WithPostgres",
+            "configurations": [
+                "IdServerApplicationWithPostgres",
+                "ApiServerApplicationWithAuthServerAndPostgres",
+            ]
+        },
     ]
 }

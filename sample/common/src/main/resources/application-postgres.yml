@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/spring
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      mode: always
+      continue-on-error: true
+      schema-locations: classpath:/com/github/jvalkeal/secpat/pat/authorization/pat-authorization-service-schema.sql

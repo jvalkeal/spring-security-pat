@@ -57,10 +57,10 @@ public class PatAuthorizationServicePatIntrospector implements PatIntrospector {
 		else {
 			validate(patAuthorization);
 		}
-		Collection<? extends GrantedAuthority> authorities = patAuthorization.getAuthorizedScopes().stream()
+		Collection<? extends GrantedAuthority> authorities = patAuthorization.getScopes().stream()
 			.map(role -> new SimpleGrantedAuthority(role))
 			.collect(Collectors.toList());
-		return PatAuthenticatedPrincipal.of(patAuthorization.getPrincipalName(), authorities);
+		return PatAuthenticatedPrincipal.of(patAuthorization.getPrincipal(), authorities);
 	}
 
 	private void validate(PatAuthorization patAuthorization) {

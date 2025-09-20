@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Personal Access Tokens</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"/>
+	<style>
+		body { margin: 2em; }
+		.token-table { margin-top: 2em; }
+		.token-name { font-weight: bold; }
+		.scopes { font-size: 0.95em; color: #555; }
+	</style>
+</head>
+<body>
+	<div th:if="${tokens.error != null}" class="ui message">
+		<div class="header">
+		Validation error!
+		</div>
+		<p th:text="${tokens.error}"></p>
+	</div>
+	<h2 class="ui header">Personal Access Tokens</h2>
+	<a class="ui primary button" th:href="@{/user/pats/generate}">Generate new token</a>
+	<table class="ui celled table token-table">
+		<tbody>
+			<form th:action="@{/user/pats}" th:object="${revoke}" method="post">
+				<tr th:if="${tokens.generated != null}">
+					<td class="token-name" th:text="${tokens.generated.name}">Token Name</td>
+					<td class="token-description" th:text="${tokens.generated.description}">Token Description</td>
+					<td th:text="${tokens.generated.expiresAt != null ? #dates.format(tokens.generated.expiresAt, 'yyyy-MM-dd') : 'Expired'}">Expired</td>
+					<td>
+						<button name="id" class="ui button" type="submit" th:value="${tokens.generated.id}">Delete</button>
+					</td>
+				</tr>
+				<tr th:if="${tokens.generated != null}">
+					<td colspan="4">
+						<div class="ui message">
+							<div class="header">Copy your personal access token now as you will not be able to see this again.</div>
+							<div th:text="${tokens.generated.content}"></div>
+						</div>
+					</td>
+				</tr>
+				<tr th:each="token : ${tokens.tokens}">
+					<td class="token-name" th:text="${token.name}">Token Name</td>
+					<td class="token-description" th:text="${token.description}">Token Description</td>
+					<td th:text="${token.expiresAt != null ? #dates.format(token.expiresAt, 'yyyy-MM-dd') : 'Expired'}">Expired</td>
+					<td>
+						<button name="id" class="ui button" type="submit" th:value="${token.id}">Delete</button>
+					</td>
+				</tr>
+			</form>
+		</tbody>
+	</table>
+</body>
+</html>

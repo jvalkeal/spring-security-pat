@@ -89,12 +89,12 @@ public final class PatTokenIntrospectionAuthenticationProvider implements Authen
 			return tokenIntrospectionAuthentication;
 		}
 
-		Set<String> authorizedScopes = authorization.getAuthorizedScopes();
+		Set<String> authorizedScopes = authorization.getScopes();
 		PatTokenIntrospection tokenClaims = PatTokenIntrospection.builder(true)
 			.scopes(scopes -> {
 				scopes.addAll(authorizedScopes);
 			})
-			.username(authorization.getPrincipalName())
+			.username(authorization.getPrincipal())
 			.issuedAt(authorization.getIssuedAt())
 			.expiresAt(authorization.getExpiresAt())
 			.notBefore(authorization.getNotBefore())

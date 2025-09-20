@@ -78,7 +78,14 @@ public class PatAuthorizationServicePatIntrospectorTests {
 	}
 
 	static PatAuthorization createAuthorization(Instant issuedAt, Instant expiresAt, Instant notBefore) {
-		return new PatAuthorization("fake", Collections.emptySet(), "fake", issuedAt, expiresAt, notBefore);
+		return PatAuthorization.builder()
+			.principal("fake")
+			.scopes(Collections.emptySet())
+			.token("fake")
+			.issuedAt(issuedAt)
+			.expiresAt(expiresAt)
+			.notBefore(notBefore)
+			.build();
 	}
 
 	static void mockAndIntrospect(PatAuthorization patAuthorization) {

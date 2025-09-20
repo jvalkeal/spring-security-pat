@@ -29,6 +29,13 @@ public class ApiServerWhoamiController {
 		return String.format("%s - %s - %s", user != null ? user.getClass() : null, user, token);
 	}
 
+	@GetMapping("/defaultoidcuser")
+	String whoami4(@AuthenticationPrincipal DefaultOidcUser user) {
+		log.debug("User Class {}", user != null ? user.getClass() : null);
+		log.debug("User {}", user);
+		return String.format("%s", user != null ? user.getName() : null);
+	}
+
 	@GetMapping("/principal")
 	String whoami2(Principal user) {
 

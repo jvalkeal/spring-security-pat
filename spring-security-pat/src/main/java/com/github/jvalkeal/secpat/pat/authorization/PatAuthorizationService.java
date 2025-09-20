@@ -16,6 +16,8 @@
 
 package com.github.jvalkeal.secpat.pat.authorization;
 
+import java.util.List;
+
 /**
  * Service store keeping relationship between a PAT token
  * and {@link PatAuthorization}.
@@ -46,4 +48,7 @@ public interface PatAuthorizationService {
 	 * @return a pat authorization
 	 */
 	PatAuthorization find(String token);
+
+	PatAuthorization findById(String id);
+	List<PatAuthorization> findByPrincipal(String principal);
 }

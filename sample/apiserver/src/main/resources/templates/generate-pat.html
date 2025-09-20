@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>New Personal Access Token</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"/>
+	<style>
+		body { margin: 2em; }
+		.token-table { margin-top: 2em; }
+		.token-name { font-weight: bold; }
+		.scopes { font-size: 0.95em; color: #555; }
+	</style>
+</head>
+<body>
+<h2>New Personal Access Token</h2>
+<form th:action="@{/user/pats}" th:object="${item}" method="post">
+	<label class="ui">Name:</label>
+	<div class="ui input">
+		<input type="text" th:field="*{name}" />
+	</div>
+	<br/>
+	<label class="ui">Description:</label>
+	<div class="ui input">
+		<input type="text" th:field="*{description}" />
+	</div>
+
+	<div class="form-group required-control">
+		<label for="scopeRead">read</label>
+		<input id="scopeRead" type="checkbox" name="scopeRead" th:checked="*{scopeRead}" />
+		<label for="scopeWrite">write</label>
+		<input id="scopeWrite" type="checkbox" name="scopeWrite" th:checked="*{scopeWrite}" />
+	</div>
+	<button class="ui button" type="submit">Generate</button>
+</form>
+<a th:href="@{/user/pats}">Back to Tokens</a>
+</body>
+</html>

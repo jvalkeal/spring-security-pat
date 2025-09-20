@@ -31,12 +31,14 @@ public class PatIntrospectionEndpointConfigurer extends AbstractPatConfigurer {
 
 	@Override
 	public void configure(HttpSecurity httpSecurity) {
-		SpringAuthServerPatIntrospector springAuthServerPatIntrospector = SpringAuthServerPatIntrospector.builder()
-			.introspectionUri(introspectionUri)
-			.clientId(clientId)
-			.clientSecret(clientSecret)
-			.build();
-		this.patIntrospector = springAuthServerPatIntrospector;
+		if (this.introspectionUri != null) {
+			SpringAuthServerPatIntrospector springAuthServerPatIntrospector = SpringAuthServerPatIntrospector.builder()
+				.introspectionUri(introspectionUri)
+				.clientId(clientId)
+				.clientSecret(clientSecret)
+				.build();
+			this.patIntrospector = springAuthServerPatIntrospector;
+		}
 	}
 
 	@Override

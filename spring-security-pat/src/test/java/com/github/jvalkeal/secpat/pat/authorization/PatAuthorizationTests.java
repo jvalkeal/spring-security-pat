@@ -34,22 +34,28 @@ public class PatAuthorizationTests {
 		Instant now = Instant.now();
 
 		assertThatThrownBy(() -> {
-			new PatAuthorization(null, authorizedScopes, token, now, now, now);
+			PatAuthorization.builder().principal(null).scopes(authorizedScopes).token(token).issuedAt(now)
+					.expiresAt(now).notBefore(now).build();
 		}).isInstanceOf(IllegalArgumentException.class);
 		assertThatThrownBy(() -> {
-			new PatAuthorization(principalName, null, token, now, now, now);
+			PatAuthorization.builder().principal(principalName).scopes(null).token(token).issuedAt(now).expiresAt(now)
+					.notBefore(now).build();
 		}).isInstanceOf(IllegalArgumentException.class);
 		assertThatThrownBy(() -> {
-			new PatAuthorization(principalName, authorizedScopes, null, now, now, now);
+			PatAuthorization.builder().principal(principalName).scopes(authorizedScopes).token(null).issuedAt(now)
+					.expiresAt(now).notBefore(now).build();
 		}).isInstanceOf(IllegalArgumentException.class);
 		assertThatThrownBy(() -> {
-			new PatAuthorization(principalName, authorizedScopes, token, null, now, now);
+			PatAuthorization.builder().principal(principalName).scopes(authorizedScopes).token(token).issuedAt(null)
+					.expiresAt(now).notBefore(now).build();
 		}).isInstanceOf(IllegalArgumentException.class);
 		assertThatThrownBy(() -> {
-			new PatAuthorization(principalName, authorizedScopes, token, now, null, now);
+			PatAuthorization.builder().principal(principalName).scopes(authorizedScopes).token(token).issuedAt(now)
+					.expiresAt(null).notBefore(now).build();
 		}).isInstanceOf(IllegalArgumentException.class);
 		assertThatThrownBy(() -> {
-			new PatAuthorization(principalName, authorizedScopes, token, now, now, null);
+			PatAuthorization.builder().principal(principalName).scopes(authorizedScopes).token(token).issuedAt(now)
+					.expiresAt(now).notBefore(null).build();
 		}).isInstanceOf(IllegalArgumentException.class);
 	}
 
@@ -62,11 +68,13 @@ public class PatAuthorizationTests {
 		Instant after = before.plusSeconds(1);
 
 		assertThatThrownBy(() -> {
-			new PatAuthorization(principalName, authorizedScopes, token, after, before, before);
+			PatAuthorization.builder().principal(principalName).scopes(authorizedScopes).token(token).issuedAt(after)
+					.expiresAt(before).notBefore(before).build();
 		}).isInstanceOf(IllegalArgumentException.class);
 
 		assertThatThrownBy(() -> {
-			new PatAuthorization(principalName, authorizedScopes, token, before, before, after);
+			PatAuthorization.builder().principal(principalName).scopes(authorizedScopes).token(token).issuedAt(before)
+					.expiresAt(before).notBefore(after).build();
 		}).isInstanceOf(IllegalArgumentException.class);
 	}
 }

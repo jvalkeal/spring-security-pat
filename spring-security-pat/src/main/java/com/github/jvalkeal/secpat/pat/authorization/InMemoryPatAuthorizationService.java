@@ -16,8 +16,12 @@
 
 package com.github.jvalkeal.secpat.pat.authorization;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+
+import org.springframework.util.ObjectUtils;
 
 /**
  * In-Memory implementation of a {@link PatAuthorizationService}.
@@ -46,4 +50,18 @@ public class InMemoryPatAuthorizationService implements PatAuthorizationService 
 		return authorizations.get(token);
 	}
 
+	@Override
+	public List<PatAuthorization> findByPrincipal(String principal) {
+		return authorizations.values().stream()
+			.filter(pa -> ObjectUtils.nullSafeEquals(pa.getPrincipal(), principal))
+			.collect(Collectors.toList());
+	}
+
+	@Override
+	public PatAuthorization findById(String id) {
+		return authorizations.values().stream()
+			.filter(pa -> ObjectUtils.nullSafeEquals(pa.getId(), id))
+			.findFirst()
+			.orElse(null);
+	}
 }

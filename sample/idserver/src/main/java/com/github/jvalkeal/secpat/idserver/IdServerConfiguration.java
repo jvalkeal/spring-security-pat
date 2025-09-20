@@ -19,13 +19,14 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 
+import com.github.jvalkeal.secpat.common.CommonJdbcConfiguration;
 import com.github.jvalkeal.secpat.common.CommonPatConfiguration;
 import com.github.jvalkeal.secpat.server.pat.PatAuthorizationServerConfigurer;
 import com.github.jvalkeal.secpat.server.pat.PatAuthorizationServerSettings;
 
 @Configuration(proxyBeanMethods = false)
 @EnableWebSecurity
-@Import({ CommonPatConfiguration.class })
+@Import({ CommonPatConfiguration.class, CommonJdbcConfiguration.class })
 public class IdServerConfiguration {
 
 	@Bean
