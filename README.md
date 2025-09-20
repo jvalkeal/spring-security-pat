@@ -9,7 +9,7 @@ Modules in this project:
 - `spring-security-pat-autoconfigure`: _Spring Security Boot_ Auto-Configuration.
 - `sample/idserver`: _Spring Authorization Server_ sample.
 - `sample/apiserver`: _API Server_ sample.
-- `sample/common`: _Shared Classes_ for _idserver_ and _apiserver_.
+- `sample/common`: _Shared Classes_ and _Configurations_ for _idserver_ and _apiserver_.
 
 **Quick Start:**
 Jump to the end of this README to learn how to compile and run the sample applications. You’ll see how to protect API endpoints using PATs.
