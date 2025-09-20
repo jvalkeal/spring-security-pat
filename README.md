@@ -55,6 +55,9 @@ A `PatAuthenticatedPrincipal` is a Spring Security's `AuthenticatedPrincipal` ad
 ### PatIntrospector
 An interface responsible to _introspect_ a `token` and return a `PatAuthenticatedPrincipal`. We have two built-in implementations, `SpringAuthServerPatIntrospector` and `PatAuthorizationServicePatIntrospector` where former is used with an `spring-authorization-server` and latter without it.
 
+### PatTokenResolver
+An interface to resolve a _PAT_ from an imcoming request. Currently there's only one implementation (`DefaultPatTokenResolver`) which is resolving token from a `X-Pat`  request header. (More is planned). This is in "flux" due to missing reactive support.
+
 ### Configuration Example
 
 There are two primary configuration scenarios: one using `spring-authorization-server` and one without it. The key distinction is that, without an authorization server, token introspection is handled locally via the configured `PatAuthorizationService`. When using `spring-authorization-server`, introspection is delegated to the authorization server
