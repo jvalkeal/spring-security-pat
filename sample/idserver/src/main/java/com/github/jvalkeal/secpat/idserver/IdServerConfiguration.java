@@ -44,7 +44,7 @@ public class IdServerConfiguration {
 		http
 			.with(patAuthorizationServerConfigurer, pat -> {
 				pat.patAuthorizationServerSettings(PatAuthorizationServerSettings.builder().build());
-				pat.tokenIntrospectionEndpoint(xxx -> {});
+				pat.tokenIntrospectionEndpoint(withDefaults());
 		});
 
 		// Only extension point to sneak in pat endpoint together with other authz endpoints

@@ -202,26 +202,41 @@ Content-Type: application/json
 ### Configuration Example
 
 ```java
+import static org.springframework.security.config.Customizer.withDefaults;
+
 public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
-    OAuth2AuthorizationServerConfigurer authorizationServerConfigurer =
-        OAuth2AuthorizationServerConfigurer.authorizationServer();
-    http.with(authorizationServerConfigurer, withDefaults());
-    http.getConfigurer(OAuth2AuthorizationServerConfigurer.class).oidc(withDefaults());
+	OAuth2AuthorizationServerConfigurer authorizationServerConfigurer =
+			OAuth2AuthorizationServerConfigurer.authorizationServer();
+	http.with(authorizationServerConfigurer, withDefaults());
+	http.authorizeHttpRequests((authorize) -> authorize.anyRequest().authenticated());
+	http.getConfigurer(OAuth2AuthorizationServerConfigurer.class).oidc(withDefaults());
 
-    PatAuthorizationServerConfigurer patAuthorizationServerConfigurer = PatAuthorizationServerConfigurer.dsl();
-    http.with(patAuthorizationServerConfigurer, pat -> {
-        pat.patAuthorizationServerSettings(PatAuthorizationServerSettings.builder().build());
-        pat.tokenIntrospectionEndpoint(xxx -> {});
-    });
+	// Add pat configuration to authz server
+	PatAuthorizationServerConfigurer patAuthorizationServerConfigurer = PatAuthorizationServerConfigurer.dsl();
+	http
+		.with(patAuthorizationServerConfigurer, pat -> {
+			pat.patAuthorizationServerSettings(PatAuthorizationServerSettings.builder().build());
+			pat.tokenIntrospectionEndpoint(withDefaults());
+	});
 
-    http.securityMatchers(matchers -> {
-        matchers.requestMatchers(
-            authorizationServerConfigurer.getEndpointsMatcher(),
-            patAuthorizationServerConfigurer.getEndpointsMatcher()
-        );
-    });
+	// Only extension point to sneak in pat endpoint together with other authz endpoints
+	// http.securityMatcher(authorizationServerConfigurer.getEndpointsMatcher());
+	http.securityMatchers(matchers -> {
+		matchers.requestMatchers(
+			authorizationServerConfigurer.getEndpointsMatcher(),
+			patAuthorizationServerConfigurer.getEndpointsMatcher()
+		);
+	});
 
-    return http.build();
+	http
+		.exceptionHandling((exceptions) -> exceptions
+			.defaultAuthenticationEntryPointFor(
+				new LoginUrlAuthenticationEntryPoint("/login"),
+				new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+			)
+		)
+		.oauth2ResourceServer((resourceServer) -> resourceServer.jwt(withDefaults()));
+	return http.build();
 }
 ```
 
