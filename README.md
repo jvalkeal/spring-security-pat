@@ -1,6 +1,6 @@
 # Spring Security PAT
 
-This project introduces Personal Access Token (PAT) support as an extension to both `spring-security` and `spring-authorization-server`. This is experimental code and there's no plans to publish this into maven central.
+This project introduces Personal Access Token (PAT) support as an extension to both `spring-security` and `spring-authorization-server`. This is experimental code and there are no plans to publish this to Maven Central.
 
 Modules in this project:
 
@@ -15,10 +15,10 @@ Modules in this project:
 Jump to the end of this README to learn how to compile and run the sample applications. You’ll see how to protect API endpoints using PATs.
 
 State:
-- Missing a lot of tests(in progress)
+- Missing a lot of tests (in progress)
 - Some cleanup/polishing to do
-- Configuration DSL's not yet stable
-- No reactive support(in progress / planned)
+- Configuration DSLs not yet stable
+- No reactive support (in progress / planned)
 
 ## Introduction
 
@@ -38,7 +38,7 @@ This section explains how to use PATs with `spring-security`.
 Before configuring PAT integration, it's helpful to understand the core concepts involved:
 
 ### PatAuthorizationService
-Defines the interface responsible for storing and retrieving tokens, mapping each `PatAuthorization` to its corresponding token. Currently, there is an in-memory implementation (`InMemoryPatAuthorizationService`) and a jdbc implementation (`JdbcPatAuthorizationService`) provided.
+Defines the interface responsible for storing and retrieving tokens, mapping each `PatAuthorization` to its corresponding token. Currently, there is an in-memory implementation (`InMemoryPatAuthorizationService`) and a JDBC implementation (`JdbcPatAuthorizationService`) provided.
 
 ### PatGenerator
 An interface responsible for generating tokens from arbitrary input. For more details, see the PAT Generation section below.
@@ -50,13 +50,13 @@ An interface for quickly matching tokens, allowing the framework to efficiently 
 A simple interface that combines a `PatGenerator` and a `PatMatcher`. A dedicated implementation of `PatService` will provide both interfaces.
 
 ### PatAuthenticatedPrincipal
-A `PatAuthenticatedPrincipal` is a Spring Security's `AuthenticatedPrincipal` adding info about a principal and granted authorities.
+A `PatAuthenticatedPrincipal` is Spring Security's `AuthenticatedPrincipal` adding info about a principal and granted authorities.
 
 ### PatIntrospector
-An interface responsible to _introspect_ a `token` and return a `PatAuthenticatedPrincipal`. We have two built-in implementations, `SpringAuthServerPatIntrospector` and `PatAuthorizationServicePatIntrospector` where former is used with an `spring-authorization-server` and latter without it.
+An interface responsible for _introspecting_ a `token` and returning a `PatAuthenticatedPrincipal`. We have two built-in implementations, `SpringAuthServerPatIntrospector` and `PatAuthorizationServicePatIntrospector`, where the former is used with a `spring-authorization-server` and the latter without it.
 
 ### PatTokenResolver
-An interface to resolve a _PAT_ from an imcoming request. Currently there's only one implementation (`DefaultPatTokenResolver`) which is resolving token from a `X-Pat`  request header. (More is planned). This is in "flux" due to missing reactive support.
+An interface to resolve a _PAT_ from an incoming request. Currently, there's only one implementation (`DefaultPatTokenResolver`) which resolves the token from an `X-PAT` request header. (More are planned.) This is in "flux" due to missing reactive support.
 
 ### Configuration Example
 
@@ -65,7 +65,7 @@ using `SpringAuthServerPatIntrospector`.
 
 #### Without `spring-authorization-server`
 
-Enable PAT integration with the default configuration. Default configuration will use an empty instance of a `InMemoryPatAuthorizationService`.
+Enable PAT integration with the default configuration. The default configuration will use an empty instance of `InMemoryPatAuthorizationService`.
 
 ```java
 import com.github.jvalkeal.secpat.pat.PatConfigurer;
@@ -78,14 +78,14 @@ public SecurityFilterChain filterChain1(HttpSecurity http) throws Exception {
 ```
 
 This default configuration gets you past the configuration phase but it may
-be useless unless you have added your own `PatAuthorizationService`. In an
-absense of a `PatAuthorizationService` a default instance of a `InMemoryPatAuthorizationService`
+be useless unless you have added your own `PatAuthorizationService`. In the
+absence of a `PatAuthorizationService`, a default instance of `InMemoryPatAuthorizationService`
 will be created which will be empty. Thus it will be useless unless you
-postprocess that service and add you own users.
+postprocess that service and add your own users.
 
 #### With `spring-authorization-server`
 
-If you have a `spring-authorization-server` suppoting Pat Introspection you enable support to delegate introspection into it.
+If you have a `spring-authorization-server` supporting Pat Introspection, you enable support to delegate introspection to it.
 
 Enable PAT integration with the default configuration.
 
@@ -101,12 +101,12 @@ public SecurityFilterChain filterChain1(HttpSecurity http) throws Exception {
 }
 ```
 
-Defining an intospection endpoint will configure introspection to happen on
-a remote server instead locally on a server.
+Defining an introspection endpoint will configure introspection to happen on
+a remote server instead of locally on a server.
 
 #### Customizing PatIntrospector
 
-To fully define your own `PatIntrospector` there's an a method for that:
+To fully define your own `PatIntrospector`, there's a method for that:
 
 ```java
 import com.github.jvalkeal.secpat.pat.PatConfigurer;
@@ -130,11 +130,11 @@ While you can use the PAT framework directly with `spring-security`, this can in
 
 The PAT Token Introspection Endpoint works similarly to OAuth2’s introspection endpoint.
 
-The introspection endpoint is a PAT endpoint that takes a parameter representing an PAT token and returns a JSON document representing the meta information surrounding the token, including whether this token is currently active.
+The introspection endpoint is a PAT endpoint that takes a parameter representing a PAT token and returns a JSON document representing the meta information surrounding the token, including whether this token is currently active.
 
-The introspection endpoint MUST be protected by a transport-layer security mechanism such as it is protected by an OAuth intospection endpoint in the spesification.
+The introspection endpoint MUST be protected by a transport-layer security mechanism, such as it is protected by an OAuth introspection endpoint in the specification.
 
-> **_NOTE:_**  It probably doesn't make sense to come up with PAT related spesification to protect endpoint and thus we should assume endpoint can be protected with same way than OAuth own introspection endpoint is protected. Essentially out of scope for this spec.
+> **_NOTE:_**  It probably doesn't make sense to come up with PAT-related specification to protect the endpoint and thus we should assume the endpoint can be protected the same way as OAuth's own introspection endpoint is protected. Essentially out of scope for this spec.
 
 #### Introspection Request
 
@@ -172,12 +172,12 @@ The server responds with a JSON object in "application/json" format with the fol
 
 - `active` **REQUIRED**: Boolean indicator of whether or not the presented token is currently active.
 - `scope` **OPTIONAL**: A JSON array containing a list of scopes associated with this token.
-- `exp` **OPTIONAL**: Integer timestamp, measured in the number of seconds since January 1 1970 UTC, indicating when this token will expire.
-- `iat` **OPTIONAL**: Integer timestamp, measured in the number of seconds since January 1 1970 UTC, indicating when this token was originally issued.
-- `nbf` **OPTIONAL**: Integer timestamp, measured in the number of seconds since January 1 1970 UTC, indicating when this token is not to be used before.
+- `exp` **OPTIONAL**: Integer timestamp, measured in the number of seconds since January 1, 1970 UTC, indicating when this token will expire.
+- `iat` **OPTIONAL**: Integer timestamp, measured in the number of seconds since January 1, 1970 UTC, indicating when this token was originally issued.
+- `nbf` **OPTIONAL**: Integer timestamp, measured in the number of seconds since January 1, 1970 UTC, indicating when this token is not to be used before.
 - `username` **OPTIONAL**: Human-readable identifier for the resource owner who authorized this token.
 
-> **_NOTE:_**  While `active` is the only field required as it's either _true_ or _false_, other fields become sort of a required when `active` is _true_.
+> **_NOTE:_**  While `active` is the only field required as it's either _true_ or _false_, other fields become sort of required when `active` is _true_.
 
 The following is a non-normative example response.
 
@@ -275,7 +275,7 @@ The format of an API key or PAT is often influenced by both security and busines
 
 ### PAT Generation
 
-This section describes a built-in features for a token generation.
+This section describes built-in features for token generation.
 
 #### Default Generator
 
@@ -283,7 +283,7 @@ The default PAT generator uses Java's UUID, offering a strong baseline of securi
 
 #### Prefixed Generator
 
-The `OrgTypeChecksumBase62PatGenerationService` offers a more structured approach to token generation. It creates tokens that include organization and type prefixes, a checksum, and Base62 encoding. This design reduces collision risk, enhances token recognition, and supports traceability. Because it requires specifying both an `org` and a `type`, it is ideal for environments where token structure and auditability are important. We don't want to provide default values for `org` and a `type`, thus for this reason, it is not the default generator.
+The `OrgTypeChecksumBase62PatGenerationService` offers a more structured approach to token generation. It creates tokens that include organization and type prefixes, a checksum, and Base62 encoding. This design reduces collision risk, enhances token recognition, and supports traceability. Because it requires specifying both an `org` and a `type`, it is ideal for environments where token structure and auditability are important. We don't want to provide default values for `org` and `type`, thus for this reason, it is not the default generator.
 
 A typical token generated by this service might look like:
 > `myorg_mytype_2amCHC_irKL0Yf8csrzUXr3r3KHiniCvIBOy55BYm5aWJoazfLo20fGdZm`
@@ -302,7 +302,7 @@ This repository includes sample applications:
 
 The API server includes endpoints that illustrate the differences between browser-based and command-line client requests.
 
-> **_IMPORTANT:_**  These samples are configured to use hostnames `idserver` and `apiserver` to work around issues with _JSESSIONID_ cookie not get mangled with servers as browser cookies are bound to hostnames thus using `localhost` for both would not work.
+> **_IMPORTANT:_**  These samples are configured to use hostnames `idserver` and `apiserver` to work around issues with _JSESSIONID_ cookies not getting mangled with servers, as browser cookies are bound to hostnames. Thus, using `localhost` for both would not work.
 
 Have something like this in your _hosts_ file:
 
@@ -319,18 +319,18 @@ Profiles:
 
 There are 3 different scenarios these samples can demonstrate.
 
-> **_NOTE:_**  In all samples we need _Authorization Server_ as _Api Server_ has `OICD` configured even if _Pat Authentication_ doesn't use _Authorization Server_.
+> **_NOTE:_**  In all samples we need an _Authorization Server_ as _Api Server_ has `OIDC` configured even if _Pat Authentication_ doesn't use _Authorization Server_.
 
-Before you continue, compile a project:
+Before you continue, compile the project:
 
 ```
 ./gradlew build
 ```
-> **_NOTE:_**  _Authorization Server_ have two users defined those being `user` and `admin` both having password set to `password`.
+> **_NOTE:_**  _Authorization Server_ has two users defined: `user` and `admin`, both having the password set to `password`.
 
 ### Pat Authentication done without Authorization Server
 
-In this sample a pat users are defined via properties using _auto-configuration_:
+In this sample, PAT users are defined via properties using _auto-configuration_:
 
 ```yml
 spring:
@@ -375,7 +375,7 @@ Scopes: read
 
 ### Pat Authentication done with Authorization Server
 
-In this example we have configured `Api Server` to delegate token instrospection into an `Authorization Server` having same user configuration as in a previous example:
+In this example, we have configured `Api Server` to delegate token introspection to an `Authorization Server` having the same user configuration as in the previous example:
 
 Start _Id Server_:
 
@@ -405,9 +405,9 @@ Scopes: read
 
 ### Complete sample with PostgreSQL and Authorization Server
 
-This is a more complate example using a `postgresql` database. _Api Server_ and _Id Server_ are configured to use _JdbcPatAuthorizationService_ as a backend.
+This is a more complete example using a `postgresql` database. _Api Server_ and _Id Server_ are configured to use _JdbcPatAuthorizationService_ as a backend.
 
-With this sample we're expect existing local instance of a `postgresql` running with _user_ `postgres`, _password `postegres` and database name `spring`. For example with docker:
+With this sample, we expect an existing local instance of `postgresql` running with _user_ `postgres`, _password_ `postgres`, and database name `spring`. For example, with Docker:
 
 ```
 docker run --name postgres -p "5432:5432" -e POSTGRES_DB=spring -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -d postgres
@@ -429,17 +429,17 @@ java -jar \
   --spring.profiles.active=authserver,postgres
 ```
 
-Go to http://apiserver:8080/user/pats, login and and create your Personal Access Tokens. These screenshots shows the process:
+Go to http://apiserver:8080/user/pats, login and create your Personal Access Tokens. These screenshots show the process:
 
 Generate a new token:
 
 ![pat1](images/pat1.png)
 
-You need to give a name and optionally select scopes(read and write):
+You need to give a name and optionally select scopes (read and write):
 
 ![pat2](images/pat2.png)
 
-Copy your token as it's a last time we show it to you:
+Copy your token as it's the last time we show it to you:
 
 ![pat3](images/pat3.png)
 
@@ -451,7 +451,7 @@ You can see tokens you have and delete the ones you don't need anymore:
 
 ![pat5](images/pat5.png)
 
-For example to use a generated PAT from a command line:
+For example, to use a generated PAT from the command line:
 
 ```
 http --body GET localhost:8080/api/whoami/principal 'X-PAT:7c5ab093-8989-4e63-8e85-4cd86f92361d'
