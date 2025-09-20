@@ -278,9 +278,9 @@ This repository includes sample applications:
 
 The API server includes endpoints that illustrate the differences between browser-based and command-line client requests.
 
-These sample are configured to use hostnames `idserver` and `apiserver` to work around issues with _JSESSION_ cookie to not get mangled with servers as browser cookies are bound to hostnames and servers share a same context path.
+> **_IMPORTANT:_**  These samples are configured to use hostnames `idserver` and `apiserver` to work around issues with _JSESSIONID_ cookie not get mangled with servers as browser cookies are bound to hostnames thus using `localhost` for both would not work.
 
-Have somthing like this in your _hosts_ file:
+Have something like this in your _hosts_ file:
 
 ```
 127.0.0.1	localhost idserver apiserver
@@ -291,4 +291,142 @@ Profiles:
 - **authserver:** `apiserver` will introspect with the authorization server
 - **patsfromyml:** Users are defined in the YAML configuration under this profile
 - **patsfromjava:** Users are defined in the shared Java configuration under this profile
+- **postgres:** Users are stored in a database
 
+There are 3 different scenarios these samples can demonstrate.
+
+> **_NOTE:_**  In all samples we need _Authorization Server_ as _Api Server_ has `OICD` configured even if _Pat Authentication_ doesn't use _Authorization Server_.
+
+Before you continue, compile a project:
+
+```
+./gradlew build
+```
+> **_NOTE:_**  _Authorization Server_ have two users defined those being `user` and `admin` both having password set to `password`.
+
+### Pat Authentication done without Authorization Server
+
+In this sample a pat users are defined via properties using _auto-configuration_:
+
+```yml
+spring:
+  security:
+    pat:
+      pats:
+      - principal: user1
+        token: pat1111
+        scopes:
+        - read
+        issued-at: 1735603200000    # Tuesday, 31 December 2024 00:00:00
+        expires-at: 1767139200000   # Wednesday, 31 December 2025 00:00:00
+        not-before: 1735603200000   # Tuesday, 31 December 2024 00:00:00
+```
+
+Start _Id Server_:
+
+```
+java -jar \
+  sample/idserver/build/libs/idserver-0.0.1-SNAPSHOT.jar \
+  --spring.profiles.active=patsfromyml
+```
+
+Start _API Server_:
+
+```
+java -jar \
+  sample/apiserver/build/libs/apiserver-0.0.1-SNAPSHOT.jar \
+  --spring.profiles.active=patsfromyml
+```
+
+Issue command-line request:
+
+```
+http --body GET localhost:8080/api/whoami/principal 'X-PAT:pat1111'
+
+class com.github.jvalkeal.secpat.pat.PatTokenAuthenticationToken - PatTokenAuthenticationToken [Principal=Name: [user1], Granted Authorities: [[read]], Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[read]] -
+```
+
+
+### Pat Authentication done with Authorization Server
+
+In this example we have configured `Api Server` to delegate token instrospection into an `Authorization Server` having same user configuration as in a previous example:
+
+Start _Id Server_:
+
+```
+java -jar \
+  sample/idserver/build/libs/idserver-0.0.1-SNAPSHOT.jar \
+  --spring.profiles.active=patsfromyml
+```
+
+Start _API Server_:
+
+```
+java -jar \
+  sample/apiserver/build/libs/apiserver-0.0.1-SNAPSHOT.jar \
+  --spring.profiles.active=patsfromyml
+```
+
+Issue command-line request:
+
+```
+http --body GET localhost:8080/api/whoami/principal 'X-PAT:pat1111'
+
+class com.github.jvalkeal.secpat.pat.PatTokenAuthenticationToken - PatTokenAuthenticationToken [Principal=Name: [user1], Granted Authorities: [[read]], Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[read]] -
+```
+
+### Complete sample with PostgreSQL and Authorization Server
+
+This is a more complate example using a `postgresql` database. _Api Server_ and _Id Server_ are configured to use _JdbcPatAuthorizationService_ as a backend.
+
+With this sample we're expect existing local instance of a `postgresql` running with _user_ `postgres`, _password `postegres` and database name `spring`. For example with docker:
+
+```
+docker run --name postgres -p "5432:5432" -e POSTGRES_DB=spring -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -d postgres
+```
+
+Start _Id Server_:
+
+```
+java -jar \
+  sample/idserver/build/libs/idserver-0.0.1-SNAPSHOT.jar \
+  --spring.profiles.active=postgres
+```
+
+Start _Api Server_:
+
+```
+java -jar \
+  sample/apiserver/build/libs/apiserver-0.0.1-SNAPSHOT.jar \
+  --spring.profiles.active=authserver,postgres
+```
+
+Go to http://apiserver:8080/user/pats, login and and create your Personal Access Tokens. These screenshots shows the process:
+
+Generate a new token:
+
+![pat1](images/pat1.png)
+
+You need to give a name and optionally select scopes(read and write):
+
+![pat2](images/pat2.png)
+
+Copy your token as it's a last time we show it to you:
+
+![pat3](images/pat3.png)
+
+You can choose more scopes:
+
+![pat4](images/pat4.png)
+
+You can see tokens you have and delete the ones you don't need anymore:
+
+![pat5](images/pat5.png)
+
+For example to use a generated PAT from a command line:
+
+```
+http --body GET localhost:8080/api/whoami/principal 'X-PAT:7c5ab093-8989-4e63-8e85-4cd86f92361d'
+
+class com.github.jvalkeal.secpat.pat.PatTokenAuthenticationToken - PatTokenAuthenticationToken [Principal=Name: [user], Granted Authorities: [[SCOPE_read]], Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[SCOPE_read]] -
+```
