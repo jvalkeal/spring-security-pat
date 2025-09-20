@@ -18,6 +18,7 @@ State:
 - Missing a lot of tests(in progress)
 - Some cleanup/polishing to do
 - Configuration DSL's not yet stable
+- No reactive support(in progress / planned)
 
 ## Introduction
 
