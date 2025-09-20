@@ -14,6 +14,11 @@ Modules in this project:
 **Quick Start:**
 Jump to the end of this README to learn how to compile and run the sample applications. You’ll see how to protect API endpoints using PATs.
 
+State:
+- Missing a lot of tests(in progress)
+- Some cleanup/polishing to do
+- Configuration DSL's not yet stable
+
 ## Introduction
 
 Modern authentication systems frequently use OAuth2, but its complexity can be excessive for simple scenarios—such as authenticating API access for users or services. The lack of a widely adopted standard for straightforward token-based API authentication has resulted in a fragmented ecosystem, with each API often implementing its own approach. This project aims to establish a consistent and practical standard for Personal Access Token authentication, particularly for users of Spring Security.
