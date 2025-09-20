@@ -379,7 +379,7 @@ Start _API Server_:
 ```
 java -jar \
   sample/apiserver/build/libs/apiserver-0.0.1-SNAPSHOT.jar \
-  --spring.profiles.active=patsfromyml
+  --spring.profiles.active=authserver
 ```
 
 Issue command-line request:
