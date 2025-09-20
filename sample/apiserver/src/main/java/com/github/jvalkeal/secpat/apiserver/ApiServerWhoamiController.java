@@ -1,6 +1,7 @@
 package com.github.jvalkeal.secpat.apiserver;
 
 import java.security.Principal;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,6 @@ public class ApiServerWhoamiController {
 		if (user instanceof DefaultOidcUser duser) {
 			token = duser.getIdToken().getTokenValue();
 		}
-
 		log.debug("User Class {}", user != null ? user.getClass() : null);
 		log.debug("User {}", user);
 		return String.format("%s - %s - %s", user != null ? user.getClass() : null, user, token);
@@ -38,12 +38,20 @@ public class ApiServerWhoamiController {
 
 	@GetMapping("/principal")
 	String whoami2(Principal user) {
-
-		String token = "";
-
+		String template = """
+				Principal class: %s
+				User: %s
+				Scopes: %s
+				""";
+		String clazz = (user != null ? user.getClass().toString() : null);
+		String name = user != null ? user.getName() : null;
+		String scopes = null;
+		if (user instanceof Authentication authentication) {
+			scopes = authentication.getAuthorities().stream().map(ga -> ga.getAuthority()).collect(Collectors.joining(","));
+		}
 		log.debug("User Class {}", user != null ? user.getClass() : null);
 		log.debug("User {}", user);
-		return String.format("%s - %s - %s", user != null ? user.getClass() : null, user, token);
+		return String.format(template, clazz, name, scopes);
 	}
 
 	@GetMapping("/authentication")
