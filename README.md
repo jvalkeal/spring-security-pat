@@ -464,3 +464,22 @@ Principal class: class com.github.jvalkeal.secpat.pat.PatTokenAuthenticationToke
 User: user
 Scopes: SCOPE_read
 ```
+
+In this sample we're delegating token introspection into an _Authorization Server_. Here is an example of a request sent from an _Api Server_.
+
+```
+http --body --form POST idserver:9000/pat/introspect\
+  token=1e0fa244-e667-43e6-8ac7-a48ef23a6681\
+  -a "oidc-client:secret"
+
+{
+  "active": true,
+  "exp": 1761047754.89909,
+  "iat": 1758455754.89909,
+  "nbf": 1758455754.89909,
+  "scope": [
+    "read"
+  ],
+  "username": "user"
+}
+```
