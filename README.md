@@ -37,8 +37,11 @@ This section explains how to use PATs with `spring-security`.
 
 Before configuring PAT integration, it's helpful to understand the core concepts involved:
 
+### PatAuthorizationRepository
+Defines the interface responsible for storing and retrieving tokens, mapping each `PatAuthorization` to its corresponding token. Currently, there is an in-memory implementation (`InMemoryPatAuthorizationRepository`) and a JDBC implementation (`JdbcPatAuthorizationRepository`) provided.
+
 ### PatAuthorizationService
-Defines the interface responsible for storing and retrieving tokens, mapping each `PatAuthorization` to its corresponding token. Currently, there is an in-memory implementation (`InMemoryPatAuthorizationService`) and a JDBC implementation (`JdbcPatAuthorizationService`) provided.
+Defines the interface responsible for retrieving a `PatAuthorization` based on a given context, which typically includes the PAT token itself. The primary implementation provided is (`RepositoryPatAuthorizationService`), which delegates to a repository backend for token lookup and validation.
 
 ### PatGenerator
 An interface responsible for generating tokens from arbitrary input. For more details, see the PAT Generation section below.
