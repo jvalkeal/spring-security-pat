@@ -434,7 +434,7 @@ java -jar \
   --spring.profiles.active=authserver,postgres
 ```
 
-Go to http://apiserver:8080/user/pats, login and create your Personal Access Tokens. These screenshots show the process:
+Go to http://apiserver:8080/user/pats, login(`user`/`admin` with `password`) and create your Personal Access Tokens. These screenshots show the process:
 
 ![login](images/login.png)
 
