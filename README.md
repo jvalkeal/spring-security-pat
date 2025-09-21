@@ -410,7 +410,7 @@ Scopes: read
 
 ### Complete sample with PostgreSQL and Authorization Server
 
-This is a more complete example using a `postgresql` database. _Api Server_ and _Id Server_ are configured to use _JdbcPatAuthorizationService_ as a backend.
+This is a more complete example using a `postgresql` database. _Api Server_ and _Id Server_ are configured to use _JdbcPatAuthorizationRepository_ as a backend.
 
 With this sample, we expect an existing local instance of `postgresql` running with _user_ `postgres`, _password_ `postgres`, and database name `spring`. For example, with Docker:
 
