@@ -71,7 +71,7 @@ using `SpringAuthServerPatIntrospector`.
 
 #### Without `spring-authorization-server`
 
-Enable PAT integration with the default configuration. The default configuration will use an empty instance of `InMemoryPatAuthorizationService`.
+Enable PAT integration with the default configuration. The default configuration will use an empty instance of `InMemoryPatAuthorizationRepository` with `RepositoryPatAuthorizationService`.
 
 ```java
 import com.github.jvalkeal.secpat.pat.PatConfigurer;
@@ -85,9 +85,9 @@ public SecurityFilterChain filterChain1(HttpSecurity http) throws Exception {
 
 This default configuration gets you past the configuration phase but it may
 be useless unless you have added your own `PatAuthorizationService`. In the
-absence of a `PatAuthorizationService`, a default instance of `InMemoryPatAuthorizationService`
-will be created which will be empty. Thus it will be useless unless you
-postprocess that service and add your own users.
+absence of a `PatAuthorizationService`, a default instance of `RepositoryPatAuthorizationService`
+using `InMemoryPatAuthorizationRepository` will be created which will be empty. Thus it will be useless
+unless you postprocess that repository and add your own users.
 
 #### With `spring-authorization-server`
 
