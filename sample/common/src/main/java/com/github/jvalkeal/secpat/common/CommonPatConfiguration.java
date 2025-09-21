@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Profile;
 import com.github.jvalkeal.secpat.pat.authorization.InMemoryPatAuthorizationRepository;
 import com.github.jvalkeal.secpat.pat.authorization.PatAuthorization;
 import com.github.jvalkeal.secpat.pat.authorization.PatAuthorizationRepository;
-import com.github.jvalkeal.secpat.pat.keygen.OrgTypeChecksumBase62PatGenerationService;
+import com.github.jvalkeal.secpat.pat.keygen.OrgPrefixPatGenerationService;
 import com.github.jvalkeal.secpat.pat.keygen.PatGenerator;
 import com.github.jvalkeal.secpat.pat.keygen.PatMatcher;
 import com.github.jvalkeal.secpat.pat.keygen.PatService;
@@ -30,7 +30,7 @@ public class CommonPatConfiguration {
 	public PatAuthorizationRepository patAuthorizationService() {
 		PatService fakeUserPatService = new FakeUserPatService();
 		PatService uuidPatService = new UUIDPatService();
-		PatService checksumPatService = new OrgTypeChecksumBase62PatGenerationService("myorg", "pat", 51);
+		PatService checksumPatService = new OrgPrefixPatGenerationService("myorg", "pat", 51);
 		PatGenerator generator = fakeUserPatService.generator();
 		InMemoryPatAuthorizationRepository repository = new InMemoryPatAuthorizationRepository();
 		Instant now = Instant.now();

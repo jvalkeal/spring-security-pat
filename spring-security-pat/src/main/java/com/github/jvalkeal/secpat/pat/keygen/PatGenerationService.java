@@ -26,7 +26,7 @@ package com.github.jvalkeal.secpat.pat.keygen;
  * would never be valid.
  *
  * @author Janne Valkealahti
- * @see OrgTypeChecksumBase62PatGenerationService
+ * @see OrgPrefixPatGenerationService
  */
 public interface PatGenerationService {
 

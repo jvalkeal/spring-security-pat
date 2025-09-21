@@ -20,13 +20,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class OrgTypeChecksumBase62PatGenerationServiceTests {
+public class OrgPrefixPatGenerationServiceTests {
 
-	private OrgTypeChecksumBase62PatGenerationService service;
+	private OrgPrefixPatGenerationService service;
 
 	@BeforeEach
 	void setup() {
-		this.service = new OrgTypeChecksumBase62PatGenerationService("org", "type", 51);
+		this.service = new OrgPrefixPatGenerationService("org", "type", 51);
 	}
 
 	@Test

@@ -27,7 +27,7 @@ import org.springframework.util.Assert;
  *
  * @author Janne Valkealahti
  */
-public final class OrgTypeChecksumBase62PatGenerationService implements PatGenerationService, PatService {
+public final class OrgPrefixPatGenerationService implements PatGenerationService, PatService {
 
 	private static final String BASE62_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 	private static final SecureRandom RANDOM = new SecureRandom();
@@ -38,11 +38,11 @@ public final class OrgTypeChecksumBase62PatGenerationService implements PatGener
 	private final int length;
 	private final String version;
 
-	public OrgTypeChecksumBase62PatGenerationService(String org, String type, int length) {
+	public OrgPrefixPatGenerationService(String org, String type, int length) {
 		this(org, type, length, null);
 	}
 
-	public OrgTypeChecksumBase62PatGenerationService(String org, String type, int length, String version) {
+	public OrgPrefixPatGenerationService(String org, String type, int length, String version) {
 		Assert.hasText(org, "org must have a value");
 		Assert.hasText(type, "type must have a value");
 		Assert.isTrue(length > 50, "length must be higher than 50");
