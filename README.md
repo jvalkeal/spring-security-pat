@@ -37,6 +37,9 @@ This section explains how to use PATs with `spring-security`.
 
 Before configuring PAT integration, it's helpful to understand the core concepts involved:
 
+### PatAuthorization
+Defines the interface that encapsulates all relevant information about a Personal Access Token (PAT), including its _token_, _id_, _name_, _description_, _principal_, _scopes_, and validity time fields such as _issuedAt_, _expiresAt_, and _notBefore_.
+
 ### PatAuthorizationRepository
 Defines the interface responsible for storing and retrieving tokens, mapping each `PatAuthorization` to its corresponding token. Currently, there is an in-memory implementation (`InMemoryPatAuthorizationRepository`) and a JDBC implementation (`JdbcPatAuthorizationRepository`) provided.
 
