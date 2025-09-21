@@ -350,8 +350,7 @@ Start _Id Server_:
 
 ```
 java -jar \
-  sample/idserver/build/libs/idserver-0.0.1-SNAPSHOT.jar \
-  --spring.profiles.active=patsfromyml
+  sample/idserver/build/libs/idserver-0.0.1-SNAPSHOT.jar
 ```
 
 Start _API Server_:
@@ -365,7 +364,7 @@ java -jar \
 Issue command-line request:
 
 ```
-http --body GET localhost:8080/api/whoami/principal 'X-PAT:pat1111'
+http --body GET apiserver:8080/api/whoami/principal 'X-PAT:pat1111'
 
 Principal class: class com.github.jvalkeal.secpat.pat.PatTokenAuthenticationToken
 User: user1
@@ -396,7 +395,7 @@ java -jar \
 Issue command-line request:
 
 ```
-http --body GET localhost:8080/api/whoami/principal 'X-PAT:pat1111'
+http --body GET apiserver:8080/api/whoami/principal 'X-PAT:pat1111'
 
 Principal class: class com.github.jvalkeal.secpat.pat.PatTokenAuthenticationToken
 User: user1
@@ -456,7 +455,7 @@ You can see tokens you have and delete the ones you don't need anymore:
 For example, to use a generated PAT from the command line:
 
 ```
-http --body GET localhost:8080/api/whoami/principal 'X-PAT:7c5ab093-8989-4e63-8e85-4cd86f92361d'
+http --body GET apiserver:8080/api/whoami/principal 'X-PAT:7c5ab093-8989-4e63-8e85-4cd86f92361d'
 
 Principal class: class com.github.jvalkeal.secpat.pat.PatTokenAuthenticationToken
 User: user
