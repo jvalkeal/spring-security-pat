@@ -20,6 +20,14 @@
 	<h2 class="ui header">Personal Access Tokens</h2>
 	<a class="ui primary button" th:href="@{/user/pats/generate}">Generate new token</a>
 	<table class="ui celled table token-table">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Expires At</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
 		<tbody>
 			<form th:action="@{/user/pats}" th:object="${revoke}" method="post">
 				<tr th:if="${tokens.generated != null}">

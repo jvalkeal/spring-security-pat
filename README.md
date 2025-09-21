@@ -455,7 +455,7 @@ You can see tokens you have and delete the ones you don't need anymore:
 For example, to use a generated PAT from the command line:
 
 ```
-http --body GET apiserver:8080/api/whoami/principal 'X-PAT:7c5ab093-8989-4e63-8e85-4cd86f92361d'
+http --body GET apiserver:8080/api/whoami/principal 'X-PAT:1e0fa244-e667-43e6-8ac7-a48ef23a6681'
 
 Principal class: class com.github.jvalkeal.secpat.pat.PatTokenAuthenticationToken
 User: user
