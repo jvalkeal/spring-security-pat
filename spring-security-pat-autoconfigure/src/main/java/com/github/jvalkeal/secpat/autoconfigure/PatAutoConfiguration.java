@@ -27,9 +27,11 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
-import com.github.jvalkeal.secpat.pat.authorization.InMemoryPatAuthorizationService;
+import com.github.jvalkeal.secpat.pat.authorization.InMemoryPatAuthorizationRepository;
 import com.github.jvalkeal.secpat.pat.authorization.PatAuthorization;
+import com.github.jvalkeal.secpat.pat.authorization.PatAuthorizationRepository;
 import com.github.jvalkeal.secpat.pat.authorization.PatAuthorizationService;
+import com.github.jvalkeal.secpat.pat.authorization.RepositoryPatAuthorizationService;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for Spring Security Pat support.
@@ -46,11 +48,16 @@ public class PatAutoConfiguration {
 	static class PatAuthorizationServiceConfiguration {
 
 		@Bean
-		InMemoryPatAuthorizationService patAuthorizationService(PatProperties patProperties) {
-			InMemoryPatAuthorizationService patAuthorizationService = new InMemoryPatAuthorizationService();
+		PatAuthorizationService patAuthorizationService(PatAuthorizationRepository patAuthorizationRepository) {
+			return new RepositoryPatAuthorizationService(patAuthorizationRepository);
+		}
+
+		@Bean
+		PatAuthorizationRepository patAuthorizationRepository(PatProperties patProperties) {
+			InMemoryPatAuthorizationRepository repository = new InMemoryPatAuthorizationRepository();
 			List<PatAuthorization> authorizations = new PatPatsPropertiesMapper(patProperties).asPatAuthorizations();
-			authorizations.forEach(patAuthorization -> patAuthorizationService.save(patAuthorization));
-			return patAuthorizationService;
+			authorizations.forEach(patAuthorization -> repository.save(patAuthorization));
+			return repository;
 		}
 
 	}

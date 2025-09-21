@@ -24,19 +24,19 @@ import java.util.stream.Collectors;
 import org.springframework.util.ObjectUtils;
 
 /**
- * In-Memory implementation of a {@link PatAuthorizationService}.
- *
- * This implementation is just for testing and demos and should
- * not be used in a production.
+ * In-Memory implementation of a {@link PatAuthorizationRepository}.
  *
  * @author Janne Valkealahti
  */
-public class InMemoryPatAuthorizationService implements PatAuthorizationService {
+public class InMemoryPatAuthorizationRepository implements PatAuthorizationRepository {
 
 	private Map<String, PatAuthorization> authorizations = new ConcurrentHashMap<>();
 
 	@Override
 	public void save(PatAuthorization authorization) {
+		if (findByToken(authorization.getToken()) != null) {
+			throw new IllegalArgumentException("Can't save with existing same token");
+		}
 		authorizations.put(authorization.getToken(), authorization);
 	}
 
@@ -46,7 +46,15 @@ public class InMemoryPatAuthorizationService implements PatAuthorizationService 
 	}
 
 	@Override
-	public PatAuthorization find(String token) {
+	public PatAuthorization findById(String id) {
+		return authorizations.values().stream()
+			.filter(pa -> ObjectUtils.nullSafeEquals(pa.getId(), id))
+			.findFirst()
+			.orElse(null);
+	}
+
+	@Override
+	public PatAuthorization findByToken(String token) {
 		return authorizations.get(token);
 	}
 
@@ -57,11 +65,4 @@ public class InMemoryPatAuthorizationService implements PatAuthorizationService 
 			.collect(Collectors.toList());
 	}
 
-	@Override
-	public PatAuthorization findById(String id) {
-		return authorizations.values().stream()
-			.filter(pa -> ObjectUtils.nullSafeEquals(pa.getId(), id))
-			.findFirst()
-			.orElse(null);
-	}
 }

@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.github.jvalkeal.secpat.pat.authorization.PatAuthorization;
-import com.github.jvalkeal.secpat.pat.authorization.PatAuthorizationService;
+import com.github.jvalkeal.secpat.pat.authorization.PatAuthorizationRepository;
 import com.github.jvalkeal.secpat.pat.keygen.PatService;
 import com.github.jvalkeal.secpat.pat.keygen.UUIDPatService;
 
@@ -46,10 +46,10 @@ import com.github.jvalkeal.secpat.pat.keygen.UUIDPatService;
 @Profile("postgres")
 public class ApiServerPatController {
 
-	private final PatAuthorizationService authorizationService;
+	private final PatAuthorizationRepository authorizationService;
 	private final PatService patService = new UUIDPatService();
 
-	public ApiServerPatController(PatAuthorizationService authorizationService) {
+	public ApiServerPatController(PatAuthorizationRepository authorizationService) {
 		this.authorizationService = authorizationService;
 	}
 

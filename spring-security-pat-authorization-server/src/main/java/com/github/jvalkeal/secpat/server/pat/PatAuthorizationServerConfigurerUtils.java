@@ -29,8 +29,10 @@ import org.springframework.security.oauth2.server.authorization.settings.Authori
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
-import com.github.jvalkeal.secpat.pat.authorization.InMemoryPatAuthorizationService;
+import com.github.jvalkeal.secpat.pat.authorization.InMemoryPatAuthorizationRepository;
+import com.github.jvalkeal.secpat.pat.authorization.PatAuthorizationRepository;
 import com.github.jvalkeal.secpat.pat.authorization.PatAuthorizationService;
+import com.github.jvalkeal.secpat.pat.authorization.RepositoryPatAuthorizationService;
 
 final class PatAuthorizationServerConfigurerUtils {
 
@@ -91,7 +93,15 @@ final class PatAuthorizationServerConfigurerUtils {
 		if (authorizationService == null) {
 			authorizationService = getOptionalBean(httpSecurity, PatAuthorizationService.class);
 			if (authorizationService == null) {
-				authorizationService = new InMemoryPatAuthorizationService();
+				PatAuthorizationRepository authorizationRepository = httpSecurity
+					.getSharedObject(PatAuthorizationRepository.class);
+				if (authorizationRepository == null) {
+					authorizationRepository = getOptionalBean(httpSecurity, PatAuthorizationRepository.class);
+					if (authorizationRepository == null) {
+						authorizationRepository = new InMemoryPatAuthorizationRepository();
+					}
+				}
+				authorizationService = new RepositoryPatAuthorizationService(authorizationRepository);
 			}
 			httpSecurity.setSharedObject(PatAuthorizationService.class, authorizationService);
 		}

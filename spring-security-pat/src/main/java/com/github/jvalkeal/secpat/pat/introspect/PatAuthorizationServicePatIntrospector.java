@@ -29,15 +29,15 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.util.Assert;
 
 import com.github.jvalkeal.secpat.pat.PatAuthenticatedPrincipal;
-import com.github.jvalkeal.secpat.pat.authorization.InMemoryPatAuthorizationService;
 import com.github.jvalkeal.secpat.pat.authorization.PatAuthorization;
 import com.github.jvalkeal.secpat.pat.authorization.PatAuthorizationService;
+import com.github.jvalkeal.secpat.pat.authorization.RepositoryPatAuthorizationService;
 
 /**
  * {@link PatIntrospector} implementation using {@link PatAuthorizationService}.
  *
  * @author Janne Valkealahti
- * @see InMemoryPatAuthorizationService
+ * @see RepositoryPatAuthorizationService
  */
 public class PatAuthorizationServicePatIntrospector implements PatIntrospector {
 
@@ -50,7 +50,8 @@ public class PatAuthorizationServicePatIntrospector implements PatIntrospector {
 
 	@Override
 	public PatAuthenticatedPrincipal introspect(String token) {
-		PatAuthorization patAuthorization = authorizationService.find(token);
+		PatAuthorization patAuthorization = authorizationService
+				.acquire(PatAuthorizationService.AcquireContext.ofToken(token));
 		if (patAuthorization == null) {
 			throw new BadCredentialsException("no token match");
 		}

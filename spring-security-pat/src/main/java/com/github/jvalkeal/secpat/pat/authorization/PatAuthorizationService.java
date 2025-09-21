@@ -16,8 +16,6 @@
 
 package com.github.jvalkeal.secpat.pat.authorization;
 
-import java.util.List;
-
 /**
  * Service store keeping relationship between a PAT token
  * and {@link PatAuthorization}.
@@ -28,27 +26,38 @@ import java.util.List;
 public interface PatAuthorizationService {
 
 	/**
-	 * Save a {@link PatAuthorization}.
+	 * Acquire a {@link PatAuthorization} with given context.
 	 *
-	 * @param authorization the pat authorization
-	 */
-	void save(PatAuthorization authorization);
-
-	/**
-	 * Remove a {@link PatAuthorization}.
-	 *
-	 * @param authorization the pat authorization
-	 */
-	void remove(PatAuthorization authorization);
-
-	/**
-	 * Find a {@link PatAuthorization} with given PAT token.
-	 *
-	 * @param token the pat token
+	 * @param context the context
 	 * @return a pat authorization
 	 */
-	PatAuthorization find(String token);
+	PatAuthorization acquire(AcquireContext context);
 
-	PatAuthorization findById(String id);
-	List<PatAuthorization> findByPrincipal(String principal);
+	/**
+	 * Context interface used with acquiring pat authorization.
+	 */
+	interface AcquireContext {
+
+		/**
+		 * A token associated with this context
+		 * @return the token
+		 */
+		String token();
+
+		/**
+		 * Build context out from a token.
+		 *
+		 * @param token the token
+		 * @return a context
+		 */
+		static AcquireContext ofToken(String token) {
+			return new AcquireContext() {
+
+				@Override
+				public String token() {
+					return token;
+				}
+			};
+		}
+	}
 }

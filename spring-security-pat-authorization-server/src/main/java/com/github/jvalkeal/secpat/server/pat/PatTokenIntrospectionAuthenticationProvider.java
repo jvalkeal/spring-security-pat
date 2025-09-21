@@ -69,10 +69,10 @@ public final class PatTokenIntrospectionAuthenticationProvider implements Authen
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		PatTokenIntrospectionAuthenticationToken tokenIntrospectionAuthentication = (PatTokenIntrospectionAuthenticationToken) authentication;
-
-		OAuth2ClientAuthenticationToken clientPrincipal = getAuthenticatedClientElseThrowInvalidClient(tokenIntrospectionAuthentication);
-
-		PatAuthorization authorization = this.authorizationService.find(tokenIntrospectionAuthentication.getToken());
+		OAuth2ClientAuthenticationToken clientPrincipal = getAuthenticatedClientElseThrowInvalidClient(
+				tokenIntrospectionAuthentication);
+		PatAuthorization authorization = this.authorizationService
+				.acquire(PatAuthorizationService.AcquireContext.ofToken(tokenIntrospectionAuthentication.getToken()));
 		if (authorization == null) {
 			if (this.logger.isTraceEnabled()) {
 				this.logger.trace("Did not authenticate pat introspection request since token was not found");

@@ -24,21 +24,46 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.security.config.annotation.web.HttpSecurityBuilder;
 import org.springframework.util.StringUtils;
 
-import com.github.jvalkeal.secpat.pat.authorization.InMemoryPatAuthorizationService;
+import com.github.jvalkeal.secpat.pat.authorization.InMemoryPatAuthorizationRepository;
+import com.github.jvalkeal.secpat.pat.authorization.PatAuthorizationRepository;
 import com.github.jvalkeal.secpat.pat.authorization.PatAuthorizationService;
+import com.github.jvalkeal.secpat.pat.authorization.RepositoryPatAuthorizationService;
 
 final class PatConfigurerUtils {
 
 	private PatConfigurerUtils() {
 	}
 
+	static <B extends HttpSecurityBuilder<B>> PatAuthorizationRepository getPatAuthorizationRepository(
+			B builder) {
+		PatAuthorizationRepository patAuthorizationRepository = getPatAuthorizationRepositoryBean(builder);
+		if (patAuthorizationRepository == null) {
+			patAuthorizationRepository = new InMemoryPatAuthorizationRepository();
+		}
+		return patAuthorizationRepository;
+	}
 
+	private static <B extends HttpSecurityBuilder<B>> PatAuthorizationRepository getPatAuthorizationRepositoryBean(
+			B builder) {
+		Map<String, PatAuthorizationRepository> patAuthorizationRepositoryMap = BeanFactoryUtils
+			.beansOfTypeIncludingAncestors(builder.getSharedObject(ApplicationContext.class),
+					PatAuthorizationRepository.class);
+		if (patAuthorizationRepositoryMap.size() > 1) {
+			throw new NoUniqueBeanDefinitionException(PatAuthorizationRepository.class,
+					patAuthorizationRepositoryMap.size(),
+					"Expected single matching bean of type '" + PatAuthorizationService.class.getName()
+							+ "' but found " + patAuthorizationRepositoryMap.size() + ": "
+							+ StringUtils.collectionToCommaDelimitedString(patAuthorizationRepositoryMap.keySet()));
+		}
+		return (!patAuthorizationRepositoryMap.isEmpty() ? patAuthorizationRepositoryMap.values().iterator().next() : null);
+	}
 
 	static <B extends HttpSecurityBuilder<B>> PatAuthorizationService getPatAuthorizationService(
 			B builder) {
 		PatAuthorizationService patAuthorizationService = getPatAuthorizationServiceBean(builder);
 		if (patAuthorizationService == null) {
-			patAuthorizationService = new InMemoryPatAuthorizationService();
+			PatAuthorizationRepository patAuthorizationRepository = getPatAuthorizationRepository(builder);
+			patAuthorizationService = new RepositoryPatAuthorizationService(patAuthorizationRepository);
 		}
 		return patAuthorizationService;
 	}

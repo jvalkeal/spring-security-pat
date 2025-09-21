@@ -31,7 +31,12 @@ import org.springframework.jdbc.core.SqlParameterValue;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
-public class JdbcPatAuthorizationService implements PatAuthorizationService {
+/**
+ * JDBC implementation of a {@link PatAuthorizationRepository}.
+ *
+ * @author Janne Valkealahti
+ */
+public class JdbcPatAuthorizationRepository implements PatAuthorizationRepository {
 
 	private static final String COLUMN_NAMES = "id, "
 			+ "name, "
@@ -58,7 +63,7 @@ public class JdbcPatAuthorizationService implements PatAuthorizationService {
 
 	private PatAuthorizationRowMapper patAuthorizationRowMapper;
 
-	public JdbcPatAuthorizationService(JdbcOperations jdbcOperations) {
+	public JdbcPatAuthorizationRepository(JdbcOperations jdbcOperations) {
 		Assert.notNull(jdbcOperations, "jdbcOperations cannot be null");
 		this.jdbcOperations = jdbcOperations;
 		this.patAuthorizationRowMapper = new PatAuthorizationRowMapper();
@@ -70,23 +75,18 @@ public class JdbcPatAuthorizationService implements PatAuthorizationService {
 		insertPatAuthorization(authorization);
 	}
 
-	private void insertPatAuthorization(PatAuthorization authorization) {
-		List<SqlParameterValue> parameters = this.patAuthorizationRowMapper.getSqlParameterValues(authorization);
-		PreparedStatementSetter pss = new ArgumentPreparedStatementSetter(parameters.toArray());
-		this.jdbcOperations.update(INSERT_PAT_AUTHORIZATION_SQL, pss);
-	}
-
 	@Override
 	public void remove(PatAuthorization authorization) {
 		deleteBy("token = ?", authorization.getToken());
 	}
 
-	private void deleteBy(String filter, Object... args) {
-		this.jdbcOperations.update(DELETE_PAT_AUTHORIZATION_SQL + filter, args);
+	@Override
+	public PatAuthorization findById(String id) {
+		return findBy("id = ?", id);
 	}
 
 	@Override
-	public PatAuthorization find(String token) {
+	public PatAuthorization findByToken(String token) {
 		return findBy("token = ?", token);
 	}
 
@@ -95,9 +95,12 @@ public class JdbcPatAuthorizationService implements PatAuthorizationService {
 		return findAllBy("principal = ?", principal);
 	}
 
-	@Override
-	public PatAuthorization findById(String id) {
-		return findBy("id = ?", id);
+	protected final JdbcOperations getJdbcOperations() {
+		return this.jdbcOperations;
+	}
+
+	protected final RowMapper<PatAuthorization> getPatAuthorizationRowMapper() {
+		return this.patAuthorizationRowMapper;
 	}
 
 	private PatAuthorization findBy(String filter, Object... args) {
@@ -112,15 +115,17 @@ public class JdbcPatAuthorizationService implements PatAuthorizationService {
 		return result;
 	}
 
-	protected final JdbcOperations getJdbcOperations() {
-		return this.jdbcOperations;
+	private void deleteBy(String filter, Object... args) {
+		this.jdbcOperations.update(DELETE_PAT_AUTHORIZATION_SQL + filter, args);
 	}
 
-	protected final RowMapper<PatAuthorization> getPatAuthorizationRowMapper() {
-		return this.patAuthorizationRowMapper;
+	private void insertPatAuthorization(PatAuthorization authorization) {
+		List<SqlParameterValue> parameters = this.patAuthorizationRowMapper.getSqlParameterValues(authorization);
+		PreparedStatementSetter pss = new ArgumentPreparedStatementSetter(parameters.toArray());
+		this.jdbcOperations.update(INSERT_PAT_AUTHORIZATION_SQL, pss);
 	}
 
-	public static class PatAuthorizationRowMapper implements RowMapper<PatAuthorization> {
+	private static class PatAuthorizationRowMapper implements RowMapper<PatAuthorization> {
 
 		@Override
 		public PatAuthorization mapRow(ResultSet rs, int rowNum) throws SQLException {

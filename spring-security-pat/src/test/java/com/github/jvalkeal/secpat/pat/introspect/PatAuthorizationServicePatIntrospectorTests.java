@@ -90,7 +90,7 @@ public class PatAuthorizationServicePatIntrospectorTests {
 
 	static void mockAndIntrospect(PatAuthorization patAuthorization) {
 		PatAuthorizationService service = mock(PatAuthorizationService.class);
-		given(service.find(any())).willReturn(patAuthorization);
+		given(service.acquire(any())).willReturn(patAuthorization);
 		PatAuthorizationServicePatIntrospector introspector = new PatAuthorizationServicePatIntrospector(service);
 		introspector.introspect("fake");
 	}

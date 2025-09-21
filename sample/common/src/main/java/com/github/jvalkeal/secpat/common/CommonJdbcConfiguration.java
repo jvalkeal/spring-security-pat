@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcOperations;
 
-import com.github.jvalkeal.secpat.pat.authorization.JdbcPatAuthorizationService;
-import com.github.jvalkeal.secpat.pat.authorization.PatAuthorizationService;
+import com.github.jvalkeal.secpat.pat.authorization.JdbcPatAuthorizationRepository;
+import com.github.jvalkeal.secpat.pat.authorization.PatAuthorizationRepository;
 
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(DataSourceProperties.class)
@@ -34,10 +34,9 @@ public class CommonJdbcConfiguration {
 		  .build();
 	}
 
-
 	@Bean
-	public PatAuthorizationService jdbcPatAuthorizationService(JdbcOperations jdbcOperations) {
-		return new JdbcPatAuthorizationService(jdbcOperations);
+	public PatAuthorizationRepository patAuthorizationRepository(JdbcOperations jdbcOperations) {
+		return new JdbcPatAuthorizationRepository(jdbcOperations);
 	}
 
 }
