@@ -31,7 +31,7 @@ public class ApiServerConfiguration {
 			});
 			http.with(PatConfigurer.dsl(), pat -> {
 				pat.endpointIntrospection(endpoint -> {
-					endpoint.introspectionUri("http://idserver:9000/pat/introspect");
+					endpoint.introspectionUri("http://localhost:9000/pat/introspect");
 					endpoint.clientId("oidc-client");
 					endpoint.clientSecret("secret");
 				});

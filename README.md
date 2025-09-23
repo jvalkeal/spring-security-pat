@@ -308,14 +308,6 @@ This repository includes sample applications:
 
 The API server includes endpoints that illustrate the differences between browser-based and command-line client requests.
 
-> **_IMPORTANT:_**  These samples are configured to use hostnames `idserver` and `apiserver` to work around issues with _JSESSIONID_ cookies not getting mangled with servers, as browser cookies are bound to hostnames. Thus, using `localhost` for both would not work.
-
-Have something like this in your _hosts_ file:
-
-```
-127.0.0.1	localhost idserver apiserver
-```
-
 Profiles:
 
 - **authserver:** `apiserver` will introspect with the authorization server
@@ -370,7 +362,7 @@ java -jar \
 Issue command-line request:
 
 ```
-http --body GET apiserver:8080/api/whoami/principal 'X-PAT:pat1111'
+http --body GET localhost:8080/api/whoami/principal 'X-PAT:pat1111'
 
 Principal class: class com.github.jvalkeal.secpat.pat.PatTokenAuthenticationToken
 User: user1
@@ -401,7 +393,7 @@ java -jar \
 Issue command-line request:
 
 ```
-http --body GET apiserver:8080/api/whoami/principal 'X-PAT:pat1111'
+http --body GET localhost:8080/api/whoami/principal 'X-PAT:pat1111'
 
 Principal class: class com.github.jvalkeal.secpat.pat.PatTokenAuthenticationToken
 User: user1
@@ -434,7 +426,7 @@ java -jar \
   --spring.profiles.active=authserver,postgres
 ```
 
-Go to http://apiserver:8080/user/pats, login(`user`/`admin` with `password`) and create your Personal Access Tokens. These screenshots show the process:
+Go to http://localhost:8080/user/pats, login(`user`/`admin` with `password`) and create your Personal Access Tokens. These screenshots show the process:
 
 ![login](images/login.png)
 
@@ -461,7 +453,7 @@ You can see tokens you have and delete the ones you don't need anymore:
 For example, to use a generated PAT from the command line:
 
 ```
-http --body GET apiserver:8080/api/whoami/principal 'X-PAT:1e0fa244-e667-43e6-8ac7-a48ef23a6681'
+http --body GET localhost:8080/api/whoami/principal 'X-PAT:1e0fa244-e667-43e6-8ac7-a48ef23a6681'
 
 Principal class: class com.github.jvalkeal.secpat.pat.PatTokenAuthenticationToken
 User: user
