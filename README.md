@@ -193,9 +193,9 @@ Content-Type: application/json
 
 {
     "active": true,
-    "exp": 1759841931.3023574,
-    "iat": 1757249931.3023574,
-    "nbf": 1757249931.3023574,
+    "exp": 1759841931,
+    "iat": 1757249931,
+    "nbf": 1757249931,
     "scope": [
         "read"
     ],
@@ -463,15 +463,15 @@ Scopes: SCOPE_read
 In this sample we're delegating token introspection into an _Authorization Server_. Here is an example of a request sent from an _Api Server_.
 
 ```
-http --body --form POST idserver:9000/pat/introspect\
+http --body --form POST localhost:9000/pat/introspect\
   token=1e0fa244-e667-43e6-8ac7-a48ef23a6681\
   -a "oidc-client:secret"
 
 {
   "active": true,
-  "exp": 1761047754.89909,
-  "iat": 1758455754.89909,
-  "nbf": 1758455754.89909,
+  "exp": 1761047754,
+  "iat": 1758455754,
+  "nbf": 1758455754,
   "scope": [
     "read"
   ],
