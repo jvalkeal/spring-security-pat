@@ -1,6 +1,6 @@
 # Spring Security PAT
 
-This project introduces Personal Access Token (PAT) support as an extension to both `spring-security` and `spring-authorization-server`. This is experimental code and there are no plans to publish this to Maven Central.
+This project introduces Personal Access Token (PAT) support as an extension to `spring-security`. Depends on `Spring Boot 4` and `Spring Security 7`. This is experimental code and there are no plans to publish this to Maven Central.
 
 Modules in this project:
 
