@@ -19,7 +19,7 @@ package com.github.jvalkeal.secpat.pat.introspect;
 import java.time.Instant;
 import java.util.List;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.security.oauth2.core.ClaimAccessor;
 import org.springframework.security.oauth2.core.OAuth2TokenIntrospectionClaimNames;
 
