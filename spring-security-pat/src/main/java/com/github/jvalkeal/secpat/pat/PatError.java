@@ -16,14 +16,9 @@
 
 package com.github.jvalkeal.secpat.pat;
 
-import java.io.Serializable;
-
-import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.util.Assert;
 
-public class PatError implements Serializable  {
-
-	private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
+public class PatError {
 
 	private final String errorCode;
 

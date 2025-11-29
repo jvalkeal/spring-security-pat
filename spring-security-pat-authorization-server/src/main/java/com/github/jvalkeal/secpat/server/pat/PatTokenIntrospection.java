@@ -16,7 +16,6 @@
 
 package com.github.jvalkeal.secpat.server.pat;
 
-import java.io.Serializable;
 import java.net.URI;
 import java.net.URL;
 import java.time.Instant;
@@ -27,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import org.springframework.security.core.SpringSecurityCoreVersion;
+import org.springframework.security.oauth2.server.authorization.OAuth2TokenIntrospection;
 import org.springframework.util.Assert;
 
 import com.github.jvalkeal.secpat.pat.introspect.PatTokenIntrospectionClaimAccessor;
@@ -39,9 +38,7 @@ import com.github.jvalkeal.secpat.pat.introspect.PatTokenIntrospectionClaimNames
  * @author Janne Valkealahti
  * @see PatTokenIntrospectionClaimAccessor
  */
-public final class PatTokenIntrospection implements PatTokenIntrospectionClaimAccessor, Serializable {
-
-	private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
+public final class PatTokenIntrospection implements PatTokenIntrospectionClaimAccessor {
 
 	private final Map<String, Object> claims;
 

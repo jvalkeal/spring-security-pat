@@ -23,7 +23,7 @@ import java.util.Map;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.SpringSecurityCoreVersion;
+import org.springframework.security.oauth2.server.authorization.OAuth2TokenIntrospection;
 import org.springframework.util.Assert;
 
 /**
@@ -34,8 +34,6 @@ import org.springframework.util.Assert;
  * @see PatTokenIntrospectionAuthenticationProvider
  */
 public class PatTokenIntrospectionAuthenticationToken extends AbstractAuthenticationToken {
-
-	private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 
 	private final String token;
 
