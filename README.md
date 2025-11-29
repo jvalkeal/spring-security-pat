@@ -463,7 +463,7 @@ User: user
 Scopes: SCOPE_read
 ```
 
-In this sample we're delegating token introspection into an _Authorization Server_. Here is an example of a request sent from an _Api Server_.
+In this sample we're delegating token introspection into an _Authorization Server_. Here is an example of a request sent from an _Api Server_ into an _Id Server_ for a token validation.
 
 ```
 http --body --form POST localhost:9000/pat/introspect\
