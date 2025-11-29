@@ -16,16 +16,46 @@
 
 package com.github.jvalkeal.secpat.pat.introspect;
 
+import java.time.Instant;
 import java.util.List;
 
 import org.springframework.lang.Nullable;
 import org.springframework.security.oauth2.core.ClaimAccessor;
+import org.springframework.security.oauth2.core.OAuth2TokenIntrospectionClaimNames;
 
 public interface PatTokenIntrospectionClaimAccessor extends ClaimAccessor {
 
 	@Nullable
 	default List<String> getScopes() {
 		return getClaimAsStringList(PatTokenIntrospectionClaimNames.SCOPE);
+	}
+
+	/**
+	 * Returns a timestamp {@code (exp)} indicating when the token expires
+	 * @return a timestamp indicating when the token expires
+	 */
+	@Nullable
+	default Instant getExpiresAt() {
+		return getClaimAsInstant(OAuth2TokenIntrospectionClaimNames.EXP);
+	}
+
+	/**
+	 * Returns a timestamp {@code (iat)} indicating when the token was issued
+	 * @return a timestamp indicating when the token was issued
+	 */
+	@Nullable
+	default Instant getIssuedAt() {
+		return getClaimAsInstant(OAuth2TokenIntrospectionClaimNames.IAT);
+	}
+
+	/**
+	 * Returns a timestamp {@code (nbf)} indicating when the token is not to be used
+	 * before
+	 * @return a timestamp indicating when the token is not to be used before
+	 */
+	@Nullable
+	default Instant getNotBefore() {
+		return getClaimAsInstant(OAuth2TokenIntrospectionClaimNames.NBF);
 	}
 
 }

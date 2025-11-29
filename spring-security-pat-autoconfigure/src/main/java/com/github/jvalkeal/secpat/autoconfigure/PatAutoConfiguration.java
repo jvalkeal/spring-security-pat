@@ -23,7 +23,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication.Type;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
@@ -38,7 +37,7 @@ import com.github.jvalkeal.secpat.pat.authorization.RepositoryPatAuthorizationSe
  *
  * @author Janne Valkealahti
  */
-@AutoConfiguration(before = { SecurityAutoConfiguration.class})
+@AutoConfiguration
 @EnableConfigurationProperties(PatProperties.class)
 @ConditionalOnWebApplication(type = Type.SERVLET)
 public class PatAutoConfiguration {

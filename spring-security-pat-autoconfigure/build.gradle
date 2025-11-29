@@ -1,6 +1,6 @@
 plugins {
 	id 'java-library'
-	id 'org.springframework.boot' version '3.5.6' apply false
+	id 'org.springframework.boot' version '4.0.0' apply false
 	id 'io.spring.dependency-management' version '1.1.7'
 	id 'eclipse'
 }
@@ -38,6 +38,7 @@ dependencies {
 	testImplementation project(':spring-security-pat')
 	testImplementation project(':spring-security-pat-authorization-server')
 	implementation 'org.springframework.boot:spring-boot-autoconfigure'
+	implementation 'org.springframework.boot:spring-boot-security'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }

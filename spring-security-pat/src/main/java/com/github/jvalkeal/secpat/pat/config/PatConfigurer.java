@@ -41,7 +41,7 @@ public class PatConfigurer extends AbstractHttpConfigurer<PatConfigurer, HttpSec
 	AuthenticationManager authenticationManager;
 
 	@Override
-	public void init(HttpSecurity builder) throws Exception {
+	public void init(HttpSecurity builder) {
 		this.configurers.values().forEach((configurer) -> {
 			configurer.init(builder);
 		});
@@ -126,7 +126,7 @@ public class PatConfigurer extends AbstractHttpConfigurer<PatConfigurer, HttpSec
 
 
 	@Override
-	public void configure(HttpSecurity http) throws Exception {
+	public void configure(HttpSecurity http) {
 		// AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
 		AuthenticationManager authenticationManager = getAuthenticationManager(http);
 		PatTokenAuthenticationFilter filter = new PatTokenAuthenticationFilter(authenticationManager);

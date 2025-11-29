@@ -198,15 +198,15 @@ public class PatTokenIntrospectionHttpMessageConverter
 			// 	responseClaims.put(PatTokenIntrospectionClaimNames.SCOPE,
 			// 			StringUtils.collectionToDelimitedString(source.getScopes(), " "));
 			// }
-			// if (source.getExpiresAt() != null) {
-			// 	responseClaims.put(PatTokenIntrospectionClaimNames.EXP, source.getExpiresAt().getEpochSecond());
-			// }
-			// if (source.getIssuedAt() != null) {
-			// 	responseClaims.put(PatTokenIntrospectionClaimNames.IAT, source.getIssuedAt().getEpochSecond());
-			// }
-			// if (source.getNotBefore() != null) {
-			// 	responseClaims.put(PatTokenIntrospectionClaimNames.NBF, source.getNotBefore().getEpochSecond());
-			// }
+			if (source.getExpiresAt() != null) {
+				responseClaims.put(PatTokenIntrospectionClaimNames.EXP, source.getExpiresAt().getEpochSecond());
+			}
+			if (source.getIssuedAt() != null) {
+				responseClaims.put(PatTokenIntrospectionClaimNames.IAT, source.getIssuedAt().getEpochSecond());
+			}
+			if (source.getNotBefore() != null) {
+				responseClaims.put(PatTokenIntrospectionClaimNames.NBF, source.getNotBefore().getEpochSecond());
+			}
 			return responseClaims;
 		}
 

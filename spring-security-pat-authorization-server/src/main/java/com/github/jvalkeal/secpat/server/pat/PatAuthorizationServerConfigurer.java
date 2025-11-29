@@ -37,7 +37,7 @@ public class PatAuthorizationServerConfigurer extends AbstractHttpConfigurer<Pat
 	private RequestMatcher endpointsMatcher;
 
 	@Override
-	public void init(HttpSecurity httpSecurity) throws Exception {
+	public void init(HttpSecurity httpSecurity) {
 		List<RequestMatcher> requestMatchers = new ArrayList<>();
 		this.configurers.values().forEach((configurer) -> {
 			configurer.init(httpSecurity);
@@ -49,7 +49,7 @@ public class PatAuthorizationServerConfigurer extends AbstractHttpConfigurer<Pat
 	}
 
 	@Override
-	public void configure(HttpSecurity httpSecurity) throws Exception {
+	public void configure(HttpSecurity httpSecurity) {
 		this.configurers.values().forEach((configurer) -> configurer.configure(httpSecurity));
 		super.configure(httpSecurity);
 	}
