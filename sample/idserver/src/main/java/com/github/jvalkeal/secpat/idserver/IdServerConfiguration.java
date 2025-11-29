@@ -10,7 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.oauth2.server.authorization.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -33,43 +32,21 @@ public class IdServerConfiguration {
 	@Order(1)
 	public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)
 			throws Exception {
-		// OAuth2AuthorizationServerConfigurer authorizationServerConfigurer =	new OAuth2AuthorizationServerConfigurer();
-		// http.with(authorizationServerConfigurer, withDefaults());
-		// http.authorizeHttpRequests((authorize) -> authorize.anyRequest().authenticated());
-		// http.getConfigurer(OAuth2AuthorizationServerConfigurer.class).oidc(withDefaults());
-
-		// // Add pat configuration to authz server
-		// PatAuthorizationServerConfigurer patAuthorizationServerConfigurer = PatAuthorizationServerConfigurer.dsl();
-		// http
-		// 	.with(patAuthorizationServerConfigurer, pat -> {
-		// 		pat.patAuthorizationServerSettings(PatAuthorizationServerSettings.builder().build());
-		// 		pat.tokenIntrospectionEndpoint(withDefaults());
-		// });
-
-		// // Only extension point to sneak in pat endpoint together with other authz endpoints
-		// // http.securityMatcher(authorizationServerConfigurer.getEndpointsMatcher());
-		// http.securityMatchers(matchers -> {
-		// 	matchers.requestMatchers(
-		// 		authorizationServerConfigurer.getEndpointsMatcher(),
-		// 		patAuthorizationServerConfigurer.getEndpointsMatcher()
-		// 	);
-		// });
-
 		// Add pat configuration to authz server
-		PatAuthorizationServerConfigurer patAuthorizationServerConfigurer = PatAuthorizationServerConfigurer.dsl();
+		PatAuthorizationServerConfigurer patAuthorizationServer = PatAuthorizationServerConfigurer.dsl();
 		http
-			.with(patAuthorizationServerConfigurer, pat -> {
+			.with(patAuthorizationServer, (pat) -> {
 				pat.patAuthorizationServerSettings(PatAuthorizationServerSettings.builder().build());
 				pat.tokenIntrospectionEndpoint(withDefaults());
 		});
 
 		http
 			.oauth2AuthorizationServer((authorizationServer) -> {
-				// http.securityMatcher(authorizationServer.getEndpointsMatcher());
+				// Only extension point to sneak in pat endpoint together with other authz endpoints
 				http.securityMatchers(matchers -> {
 					matchers.requestMatchers(
 						authorizationServer.getEndpointsMatcher(),
-						patAuthorizationServerConfigurer.getEndpointsMatcher()
+						patAuthorizationServer.getEndpointsMatcher()
 					);
 				});
 				authorizationServer
