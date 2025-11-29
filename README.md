@@ -74,10 +74,10 @@ using `SpringAuthServerPatIntrospector`.
 Enable PAT integration with the default configuration. The default configuration will use an empty instance of `InMemoryPatAuthorizationRepository` with `RepositoryPatAuthorizationService`.
 
 ```java
-import com.github.jvalkeal.secpat.pat.PatConfigurer;
+import com.github.jvalkeal.secpat.pat.config.PatConfigurer;
 import static org.springframework.security.config.Customizer.withDefaults;
 
-public SecurityFilterChain filterChain1(HttpSecurity http) throws Exception {
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.with(PatConfigurer.dsl(), withDefaults());
     return http.build();
 }
@@ -96,10 +96,10 @@ If you have a `spring-authorization-server` supporting Pat Introspection, you en
 Enable PAT integration with the default configuration.
 
 ```java
-import com.github.jvalkeal.secpat.pat.PatConfigurer;
+import com.github.jvalkeal.secpat.pat.config.PatConfigurer;
 import static org.springframework.security.config.Customizer.withDefaults;
 
-public SecurityFilterChain filterChain1(HttpSecurity http) throws Exception {
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.with(PatConfigurer.dsl(), pat -> {
         pat.endpointIntrospection(withDefaults());
     });
@@ -115,10 +115,10 @@ a remote server instead of locally on a server.
 To fully define your own `PatIntrospector`, there's a method for that:
 
 ```java
-import com.github.jvalkeal.secpat.pat.PatConfigurer;
+import com.github.jvalkeal.secpat.pat.config.PatConfigurer;
 import com.github.jvalkeal.secpat.pat.introspect.PatIntrospector;
 
-public SecurityFilterChain filterChain1(HttpSecurity http) throws Exception {
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     PatIntrospector patIntrospector = create();
     http.with(PatConfigurer.dsl(), pat -> {
         pat.introspector(patIntrospector);
@@ -218,31 +218,34 @@ Content-Type: application/json
 
 ```java
 import static org.springframework.security.config.Customizer.withDefaults;
+import com.github.jvalkeal.secpat.server.pat.PatAuthorizationServerConfigurer;
+import com.github.jvalkeal.secpat.server.pat.PatAuthorizationServerSettings;
 
-public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
-	OAuth2AuthorizationServerConfigurer authorizationServerConfigurer =
-			OAuth2AuthorizationServerConfigurer.authorizationServer();
-	http.with(authorizationServerConfigurer, withDefaults());
-	http.authorizeHttpRequests((authorize) -> authorize.anyRequest().authenticated());
-	http.getConfigurer(OAuth2AuthorizationServerConfigurer.class).oidc(withDefaults());
-
+public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)
+		throws Exception {
 	// Add pat configuration to authz server
-	PatAuthorizationServerConfigurer patAuthorizationServerConfigurer = PatAuthorizationServerConfigurer.dsl();
+	PatAuthorizationServerConfigurer patAuthorizationServer = PatAuthorizationServerConfigurer.dsl();
 	http
-		.with(patAuthorizationServerConfigurer, pat -> {
+		.with(patAuthorizationServer, (pat) -> {
 			pat.patAuthorizationServerSettings(PatAuthorizationServerSettings.builder().build());
 			pat.tokenIntrospectionEndpoint(withDefaults());
 	});
-
-	// Only extension point to sneak in pat endpoint together with other authz endpoints
-	// http.securityMatcher(authorizationServerConfigurer.getEndpointsMatcher());
-	http.securityMatchers(matchers -> {
-		matchers.requestMatchers(
-			authorizationServerConfigurer.getEndpointsMatcher(),
-			patAuthorizationServerConfigurer.getEndpointsMatcher()
+	http
+		.oauth2AuthorizationServer((authorizationServer) -> {
+			// Only extension point to sneak in pat endpoint together with other authz endpoints
+			http.securityMatchers(matchers -> {
+				matchers.requestMatchers(
+					authorizationServer.getEndpointsMatcher(),
+					patAuthorizationServer.getEndpointsMatcher()
+				);
+			});
+			authorizationServer
+				.oidc(Customizer.withDefaults());
+		})
+		.authorizeHttpRequests((authorize) ->
+			authorize
+				.anyRequest().authenticated()
 		);
-	});
-
 	http
 		.exceptionHandling((exceptions) -> exceptions
 			.defaultAuthenticationEntryPointFor(
