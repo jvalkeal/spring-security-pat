@@ -61,10 +61,19 @@ public class ApiServerPatController {
 		return "list-pats";
 	}
 
+	private static Instant nullIfPast(Instant instant) {
+		if (instant != null) {
+			if (instant.isBefore(Instant.now())) {
+				return null;
+			}
+		}
+		return instant;
+	}
+
 	private List<ExistingToken> getUserTokens(String principal) {
 		return authorizationService.findByPrincipal(principal).stream()
 			.map(pa -> {
-				return new ExistingToken(pa.getId(), pa.getName(), pa.getDescription(), pa.getExpiresAt());
+				return new ExistingToken(pa.getId(), pa.getName(), pa.getDescription(), nullIfPast(pa.getExpiresAt()));
 			})
 			.collect(Collectors.toList());
 	}
