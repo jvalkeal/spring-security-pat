@@ -460,7 +460,7 @@ http --body GET localhost:8080/api/whoami/principal 'X-PAT:1e0fa244-e667-43e6-8a
 
 Principal class: class com.github.jvalkeal.secpat.pat.PatTokenAuthenticationToken
 User: user
-Scopes: SCOPE_read
+Scopes: read
 ```
 
 In this sample we're delegating token introspection into an _Authorization Server_. Here is an example of a request sent from an _Api Server_ into an _Id Server_ for a token validation.

@@ -63,8 +63,6 @@ public class SpringAuthServerPatIntrospector implements PatIntrospector {
 
 	private final Log logger = LogFactory.getLog(getClass());
 
-	private static final String AUTHORITY_PREFIX = "SCOPE_";
-
 	private final RestOperations restOperations;
 
 	private Converter<String, RequestEntity<?>> requestEntityConverter;
@@ -99,7 +97,7 @@ public class SpringAuthServerPatIntrospector implements PatIntrospector {
 		// }
 		Collection<GrantedAuthority> authorities = new ArrayList<>();
 		for (String scope : scopes) {
-			authorities.add(new SimpleGrantedAuthority(AUTHORITY_PREFIX + scope));
+			authorities.add(new SimpleGrantedAuthority(scope));
 		}
 		return authorities;
 	}
